@@ -3,7 +3,7 @@ work-tracker
 ============
 
 
-.. image:: https://img.shields.io/pypi/v/work-tracker.svg
+.. .. image:: https://img.shields.io/pypi/v/work-tracker.svg
         :target: https://pypi.python.org/pypi/work-tracker
 
 .. image:: https://img.shields.io/travis/s-weigand/work-tracker.svg

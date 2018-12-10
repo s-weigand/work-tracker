@@ -51,14 +51,12 @@ matrix:
 
     - python: 3.6
       env: TOXENV=py36
-      after_success:
-        - echo "done"
 
     - language: python
       sudo: required
       dist: xenial
       python: "3.7"
-      env: linux-py37
+      env: TOXENV=py37
 
     - language: generic
       python: 3.6

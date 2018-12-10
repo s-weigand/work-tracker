@@ -19,8 +19,8 @@ This is the preferred method to install work-tracker, as it will always install 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
-.. _pip: https://pip.pypa.io
-.. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
+.. _pip: https://pip.pypa.io/en/stable/
+.. _Python installation guide: https://docs.python-guide.org/starting/installation/
 
 
 From sources
@@ -38,7 +38,7 @@ Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/s-weigand/work_tracker/tarball/master
+    $ curl  -OL https://github.com/s-weigand/work-tracker/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/s-weigand/work_tracker
-.. _tarball: https://github.com/s-weigand/work_tracker/tarball/master
+.. _Github repo: https://github.com/s-weigand/work-tracker
+.. _tarball: https://github.com/s-weigand/work-tracker/tarball/master
