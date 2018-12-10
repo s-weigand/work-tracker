@@ -32,7 +32,7 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/s-weigand/work_tracker
+    $ git clone git://github.com/s-weigand/work-tracker
 
 Or download the `tarball`_:
 

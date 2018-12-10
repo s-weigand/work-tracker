@@ -79,8 +79,7 @@ Ready to contribute? Here's how to set up `work-tracker` for local development.
 5. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
-    $ flake8 work_tracker tests
-    $ python setup.py test or py.test
+
     $ tox
 
    To get flake8 and tox, just pip install them into your virtualenv.
@@ -112,7 +111,7 @@ Tips
 To run a subset of tests::
 
 
-    $ python -m unittest tests.test_work_tracker
+    $ py.test tests.test_work_tracker
 
 Deploying
 ---------
