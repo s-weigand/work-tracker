@@ -1,5 +1,5 @@
 Welcome to work-tracker's documentation!
-======================================
+========================================
 
 .. toctree::
    :maxdepth: 2

@@ -3,11 +3,11 @@ work-tracker
 ============
 
 
-.. image:: https://img.shields.io/pypi/v/work_tracker.svg
-        :target: https://pypi.python.org/pypi/work_tracker
+.. image:: https://img.shields.io/pypi/v/work-tracker.svg
+        :target: https://pypi.python.org/pypi/work-tracker
 
-.. image:: https://img.shields.io/travis/s-weigand/work_tracker.svg
-        :target: https://travis-ci.org/s-weigand/work_tracker
+.. image:: https://img.shields.io/travis/s-weigand/work-tracker.svg
+        :target: https://travis-ci.org/s-weigand/work-tracker
 
 .. image:: https://readthedocs.org/projects/work-tracker/badge/?version=latest
         :target: https://work-tracker.readthedocs.io/en/latest/?badge=latest
@@ -16,7 +16,7 @@ work-tracker
 
 
 
-Simple tool to keep track of your work time and/or productivity 
+Simple tool to keep track of your work time and/or productivity
 
 
 * Free software: Apache Software License 2.0
