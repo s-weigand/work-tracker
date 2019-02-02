@@ -111,6 +111,10 @@ class DbBaseClass:
         """
         Downloads the db_file to db_path_online from the SFTP server,
         at ["login"]["db_path"] specified in the config file
+
+        Returns
+        -------
+        success: bool
         """
         try:
             with pysftp.Connection(**self.login_dict) as sftp:
@@ -124,6 +128,10 @@ class DbBaseClass:
         """
         Pushes the db_file from db_path_offline to the SFTP server,
         at ["login"]["db_path"] specified in the config file
+
+        Returns
+        -------
+        success: bool
         """
         try:
             with pysftp.Connection(**self.login_dict) as sftp:
@@ -134,6 +142,15 @@ class DbBaseClass:
             return False
 
     def merge_dbs(self):
+        """
+        Merges local db merged with remote db, the overlap (same start)
+        is replaced with the max value of end
+
+        Returns
+        -------
+        merged_db: pd.Dataframe
+            local db merged with remote db, with striped overlap
+        """
         remote_db = self.load_db(self.db_path_online)
         if not self.db.equals(remote_db):
             new_db = pd.merge(self.db, remote_db,
@@ -145,7 +162,7 @@ class DbBaseClass:
             for start_val in start_fix.values:
                 dup_index = new_db.index[new_db['start'].isin([start_val])]
                 max_end_ts = new_db["end"].loc[dup_index].max()
-                new_db.ix[dup_index[0], "end"] = max_end_ts
+                new_db.at[dup_index[0], "end"] = max_end_ts
                 drop_list.append(dup_index[1:])
             flat_drop_list = [item for sublist in drop_list for item in sublist]
             new_db.drop(new_db.index[flat_drop_list], inplace=True)

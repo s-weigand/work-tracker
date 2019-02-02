@@ -29,8 +29,10 @@ def DbInteraction_worker(test_data, monkeypatch):
     DbInteraction_worker.tomorrow = datetime.datetime(2017, 8, 9, 0, 0, 0, 0)
     return DbInteraction_worker
 
+
 def test_get_session_time(DbInteraction_worker):
     assert DbInteraction_worker.get_session_time() == '1:10'
+
 
 def test_update_now_and_tomorrow(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_datetime_now',
@@ -51,6 +53,7 @@ def test_update_db_locale_short_break(DbInteraction_worker, monkeypatch):
     assert session_time == ('17:14', '1:14')
     assert len(DbInteraction_worker.db.index) == 3
 
+
 def test_update_db_locale_long_break(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
                         mock_time_long_break)
@@ -59,6 +62,7 @@ def test_update_db_locale_long_break(DbInteraction_worker, monkeypatch):
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ('17:14', '1:10')
     assert len(DbInteraction_worker.db.index) == 4
+
 
 def test_update_db_date_changed_during_session_short_break(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
@@ -100,7 +104,7 @@ def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data)
                         mock_datetime_now)
     DbInteraction_worker.start_session()
     result = test_data["result"].copy()
-    result.ix[2, "end"] = mock_time_short_break()
+    result.at[2, "end"] = mock_time_short_break()
     assert_frame_equal(DbInteraction_worker.db, result, check_exact=True)
 
 

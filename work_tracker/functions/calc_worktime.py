@@ -81,7 +81,7 @@ class WorktimeCalculator(DbBaseClass):
         contract_info_df = pd.read_csv(self.contract_info_path, parse_dates=["start"], sep="\t")
         for index, row in contract_info_df.iterrows():
             if index < contract_info_df.shape[0]-1:
-                end_date = contract_info_df.ix[index + 1, "start"] - pd.to_timedelta("1D")
+                end_date = contract_info_df["start"].iloc[index + 1] - pd.to_timedelta("1D")
             else:
                 end_date = self.db["end"].max()
             business_days = CustomBusinessDay(weekmask=row["weekmask"])
@@ -245,7 +245,7 @@ class WorktimeCalculator(DbBaseClass):
     def get_total_df(self):
         self.db["worktime"] = self.db["end"] - self.db["start"]
         result_df = pd.concat([self.db, self.get_holiday_df(),
-                               self.get_manual_df_with_workime()])
+                               self.get_manual_df_with_workime()], sort=False)
         result_df = self.add_time_columns(result_df)
         result_df = result_df.sort_values(["start",
                                            "end"]).reset_index(drop=True)
@@ -298,4 +298,4 @@ class WorktimeCalculator(DbBaseClass):
                                                            on=date_time_column).worktime.sum()
             occupation_series = occupation_series.rename(occupation)
             plot_df = plot_df.join(occupation_series)
-        return plot_df.fillna(0)
+        return plot_df.fillna(pd.Timedelta(seconds=0))

@@ -11,7 +11,7 @@ import datetime
 import pandas as pd
 # import pysftp
 
-from .helpfer_functions import get_abs_path, seconds_to_hm, get_midnight_datetime
+from .helpfer_functions import get_abs_path, seconds_to_hm, get_midnight_datetime, debug_printer
 from .base_classes import DbBaseClass
 
 
@@ -100,11 +100,11 @@ class DbInteraction(DbBaseClass):
         # case all session today
         today_df = self.db[(self.db['start'] > self.today) &
                            (self.db['start'] < self.tomorrow)]
-        start_was_today = today_df["start"].any()
+        start_was_today = len(today_df.index)
         # case date changed during session
         yesterday_df = self.db[(self.db['start'] > self.yesterday) &
                                (self.db['start'] < self.today)]
-        start_was_yesterday = yesterday_df["start"].any()
+        start_was_yesterday = len(yesterday_df.index)
         # short pause is less than 10min which prevents resets by crashes
         if start_was_today:
             is_short_break = self.get_pandas_now() - today_df['end'].max() < \
