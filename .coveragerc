@@ -6,6 +6,7 @@ include = work_tracker/*
 omit = setup.py
        work_tracker/__init__.py
        tests/__init__.py
+       work_tracker/UI_files/auto_generated/*
 
 [report]
 # Regexes for lines to exclude from consideration
