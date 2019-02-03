@@ -10,8 +10,17 @@ if "%SPHINXBUILD%" == "" (
 set SOURCEDIR=.
 set BUILDDIR=_build
 set SPHINXPROJ=work_tracker
+set SPHINXOPTS=-W
 
 if "%1" == "" goto help
+
+if "%1" == "clean_all" (
+	for /d %%i in (%BUILDDIR%\*) do rmdir /q /s %%i
+	del /q /s %BUILDDIR%\*
+	for /d %%i in (%API_TOCTREE_DIR%\*) do rmdir /q /s %%i
+	del /q /s %API_TOCTREE_DIR%\*
+	goto end
+)
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
