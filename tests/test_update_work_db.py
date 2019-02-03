@@ -19,7 +19,7 @@ from tests.test_base_classes import test_data  # noqa: F401
 
 
 @pytest.fixture(scope="function")  # noqa: F811
-def DbInteraction_worker(test_data, monkeypatch):
+def DbInteraction_worker(test_data, monkeypatch):  # noqa: F811
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_remote_db',
                         mock_True)
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.push_remote_db',

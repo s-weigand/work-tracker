@@ -6,6 +6,7 @@ watchdog>=0.9.0
 flake8>=3.5.0
 tox>=3.5.2
 pytest>=4.0.0
+pytest-cov>=2.5.1
 pytest-sftpserver>=1.2
 coverage>=4.5.1
 sphinx-rtd-theme>=0.3.1
