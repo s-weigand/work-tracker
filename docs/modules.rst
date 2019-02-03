@@ -1,5 +1,11 @@
 Module documentation
 ====================
 
-TODO
-####
+.. currentmodule:: work_tracker.functions.base_classes
+
+.. autosummary::
+   :nosignatures:
+   :toctree: api/
+
+   DbBaseClass
+

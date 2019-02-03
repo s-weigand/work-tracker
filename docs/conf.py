@@ -37,6 +37,12 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon']
 
+
+autoclass_content = "both"
+autosummary_generate = True
+add_module_names = False
+autodoc_member_order = "bysource"
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
