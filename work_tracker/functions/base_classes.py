@@ -26,7 +26,7 @@ class DbBaseClass:
 
         Returns
         -------
-
+        current time as timestamp: pd.Timestamp
         """
         return pd.to_datetime(datetime.datetime.now())
 
@@ -57,10 +57,13 @@ class DbBaseClass:
         host = config.get("login", "host")
         username = config.get("login", "username")
         password = config.get("login", "password")
+        port = config.get("login", "port", fallback=22)
         self.db_path = config.get("login", "db_path")
         self.login_dict = {'host': host,
                            "username": username,
-                           "password": password}
+                           "password": password,
+                           "port": port
+                           }
 
         occupations = config.get("occupation", "occupations").split(",")
         last_occupation = config.get('occupation', 'last_occupation')
@@ -90,7 +93,7 @@ class DbBaseClass:
 
         Returns
         -------
-
+        db : pd.Dataframe
         """
         if not os.path.isfile(db_path):
             return pd.DataFrame([{"start": self.get_pandas_now(),

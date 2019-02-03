@@ -101,7 +101,8 @@ def debug_printer(arg):
         print()
         print("#" * padding)
         print(caller_lines)
-        print("#" * padding, "\n")
+        print("#" * padding)
+        print()
         print(arg)
     finally:
         del frame

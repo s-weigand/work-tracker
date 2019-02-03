@@ -5,18 +5,20 @@
 """
 
 import datetime
-import numpy as np
+# import numpy as np
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pytest
 
-from work_tracker.functions.helpfer_functions import get_abs_path, get_midnight_datetime
+from work_tracker.functions.helpfer_functions import str_datetime, get_midnight_datetime
 from work_tracker.functions.update_work_db import DbInteraction
-from tests.test_mocks import *
-from tests.test_base_classes import test_data
+from tests.custom_mocks import (mock_True, mock_pysftp_CnOpts, mock_datetime_now,
+                                mock_time_short_break, mock_time_long_break,
+                                mock_numpy_now_date_change, mock_datetime_now_date_change)
+from tests.test_base_classes import test_data  # noqa: F401
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="function")  # noqa: F811
 def DbInteraction_worker(test_data, monkeypatch):
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_remote_db',
                         mock_True)
@@ -39,9 +41,9 @@ def test_update_now_and_tomorrow(DbInteraction_worker, monkeypatch):
                         mock_datetime_now)
     DbInteraction_worker.update_now_and_tomorrow()
     assert DbInteraction_worker.today == \
-           get_midnight_datetime(str_datetime("2017-08-08 18:29:33.0"))
+        get_midnight_datetime(str_datetime("2017-08-08 18:29:33.0"))
     assert DbInteraction_worker.tomorrow == \
-           get_midnight_datetime(str_datetime("2017-08-08 18:29:33.0"))+datetime.timedelta(1)
+        get_midnight_datetime(str_datetime("2017-08-08 18:29:33.0"))+datetime.timedelta(1)
 
 
 def test_update_db_locale_short_break(DbInteraction_worker, monkeypatch):
@@ -97,7 +99,7 @@ def test_get_start_time(DbInteraction_worker):
     assert start_time == '17:14'
 
 
-def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data):
+def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data):  # noqa: F811
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
                         mock_time_short_break)
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_datetime_now',
@@ -108,7 +110,7 @@ def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data)
     assert_frame_equal(DbInteraction_worker.db, result, check_exact=True)
 
 
-def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data):
+def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data):  # noqa: F811
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
                         mock_time_long_break)
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_datetime_now',
@@ -125,7 +127,7 @@ def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data):
     assert_frame_equal(DbInteraction_worker.db, result, check_exact=True)
 
 
-def test_change_occupation(DbInteraction_worker, monkeypatch, test_data):
+def test_change_occupation(DbInteraction_worker, monkeypatch, test_data):  # noqa: F811
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
                         mock_time_short_break)
     monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_datetime_now',
