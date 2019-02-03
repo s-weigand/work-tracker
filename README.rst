@@ -8,11 +8,15 @@ work-tracker
 
 .. image:: https://img.shields.io/travis/s-weigand/work-tracker.svg
         :target: https://travis-ci.org/s-weigand/work-tracker
+        :alt: Travis build
 
 .. image:: https://readthedocs.org/projects/work-tracker/badge/?version=latest
         :target: https://work-tracker.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+.. image:: https://coveralls.io/repos/github/s-weigand/work-tracker/badge.svg?branch=master
+        :target: https://coveralls.io/github/s-weigand/work-tracker?branch=master
+        :alt: Code Coverage
 
 
 
