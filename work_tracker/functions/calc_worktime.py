@@ -126,8 +126,6 @@ class WorktimeCalculator(DbBaseClass):
             daily_worktime = (worktime*12)/(365-52*(7-work_days_per_week))
         return daily_worktime
 
-        pass
-
     def get_holiday_df(self):
         """
         Generates a Dataframe containing all holidays from the start of the
@@ -164,28 +162,28 @@ class WorktimeCalculator(DbBaseClass):
 
         """
         # fallback in case country wasn't provided
-        if self.country == "":
-            return []
-        # init a  holidays class depending on the country and province
-        if self.province != "":
-            custom_holidays = eval("holidays.{}(state='{}')".format(self.country,
-                                                                    self.province),
-                                   globals())
+        if self.country in dir(holidays):
+            # get holidays class depending on the country
+            country_class = getattr(holidays, self.country)
+            # get holidays class depending on the country and province
+            if self.province in country_class.PROVINCES:
+                custom_holidays = country_class(state=self.province)
+            else:
+                custom_holidays = country_class()
+            # update holidays with special_holidays, given in the config
+            special_holiday_update_dict = {}
+            # for year in pd.unique(self.contact_worktime_df.index.year):
+            for year in pd.unique(self.contract_worktime_df["start"].dt.year):
+                for key, val in self.special_holidays.items():
+                    day = int(key.split("-")[0])
+                    month = int(key.split("-")[1])
+                    date = datetime.datetime(year, month, day)
+                    special_holiday_update_dict[date] = val
+            # add new holidays to custom_holidays
+            custom_holidays.update(special_holiday_update_dict)
+            return custom_holidays
         else:
-            custom_holidays = eval("holidays.{}()".format(self.country),
-                                   globals())
-        # update holidays with special_holidays, given in the config
-        special_holiday_update_dict = {}
-        # for year in pd.unique(self.contact_worktime_df.index.year):
-        for year in pd.unique(self.contract_worktime_df["start"].dt.year):
-            for key, val in self.special_holidays.items():
-                day = int(key.split("-")[0])
-                month = int(key.split("-")[1])
-                date = datetime.datetime(year, month, day)
-                special_holiday_update_dict[date] = val
-        # add new holidays to custom_holidays
-        custom_holidays.update(special_holiday_update_dict)
-        return custom_holidays
+            return []
 
     def get_manual_df_with_workime(self):
         """

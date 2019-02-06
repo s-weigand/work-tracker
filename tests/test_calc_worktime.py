@@ -21,7 +21,7 @@ pd.options.display.max_colwidth = 50
 
 
 @pytest.fixture(scope="module")
-def test_data_cal():
+def data_test_cal():
     test_df_path = get_abs_path("../tests/test_data/calc_worktime_test_DF.csv")
     test_df = pd.DataFrame([
         {"start": str_datetime("2017-08-06 23:24:33.324733"),
@@ -73,7 +73,7 @@ def test_data_cal():
 
 
 @pytest.fixture(scope="function")
-def Calculator(monkeypatch, test_data_cal):
+def Calculator(monkeypatch, data_test_cal):
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_remote_db',
                         mock_True)
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.push_remote_db',
@@ -85,9 +85,9 @@ def Calculator(monkeypatch, test_data_cal):
     return Calculator
 
 
-def test_split_date_overlap_session(Calculator, test_data_cal):
+def test_split_date_overlap_session(Calculator, data_test_cal):
     Calculator.split_date_overlap_session()
-    assert_frame_equal(test_data_cal["result"], Calculator.db)
+    assert_frame_equal(data_test_cal["result"], Calculator.db)
 
 
 def test_get_holiday_df(Calculator):
@@ -99,11 +99,11 @@ def test_get_holiday_df(Calculator):
     assert_frame_equal(holidays_df, holiday_result[["start", "end", "occupation", "worktime"]])
 
 
-def test_get_manual_df_with_workime(Calculator, test_data_cal):
+def test_get_manual_df_with_workime(Calculator, data_test_cal):
     manual_df = Calculator.get_manual_df_with_workime()
-    test_data_cal["manual_df"].loc[:, "worktime"] = \
-        pd.to_timedelta(test_data_cal["manual_df"]["worktime"], unit="h")
-    assert_frame_equal(manual_df, test_data_cal["manual_df"])
+    data_test_cal["manual_df"].loc[:, "worktime"] = \
+        pd.to_timedelta(data_test_cal["manual_df"]["worktime"], unit="h")
+    assert_frame_equal(manual_df, data_test_cal["manual_df"])
 
 
 def test_init_holidays(Calculator):
