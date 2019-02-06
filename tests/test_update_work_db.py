@@ -14,7 +14,8 @@ from work_tracker.functions.helpfer_functions import str_datetime, get_midnight_
 from work_tracker.functions.update_work_db import DbInteraction
 from tests.custom_mocks import (mock_True, mock_pysftp_CnOpts, mock_datetime_now,
                                 mock_time_short_break, mock_time_long_break,
-                                mock_numpy_now_date_change, mock_datetime_now_date_change)
+                                mock_numpy_now_date_change, mock_datetime_now_date_change,
+                                mock_var_time)
 from tests.test_base_classes import test_data  # noqa: F401
 
 
@@ -64,6 +65,31 @@ def test_update_db_locale_long_break(DbInteraction_worker, monkeypatch):
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ('17:14', '1:10')
     assert len(DbInteraction_worker.db.index) == 4
+
+
+def test_update_db_with_day_change_and_running_update(DbInteraction_worker, monkeypatch):
+    # this is due to a bug i observed, where after midnight new rows did get appended
+    # with start midnight and end current time
+    db_before = DbInteraction_worker.db.copy()
+    for offset in range(10):
+        monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_pandas_now',
+                            mock_var_time(offset*2))
+        monkeypatch.setattr('work_tracker.functions.update_work_db.DbInteraction.get_datetime_now',
+                            mock_var_time(offset*2, kind="datetime"))
+        session_time = DbInteraction_worker.update_db_locale()
+
+    new_row = pd.DataFrame([{"start": str_datetime("2017-08-08 23:59:00.0"),
+                             "end": str_datetime("2017-08-09 00:00:00.0"),
+                             "occupation": "TestOccupation1"},
+                            {"start": str_datetime("2017-08-09 00:00:00.0"),
+                             "end": str_datetime("2017-08-09 00:17:00.0"),
+                             "occupation": "TestOccupation1"}
+                            ])
+    result = db_before.append(new_row, ignore_index=True)
+    # session_time = DbInteraction_worker.update_db_locale()
+    assert session_time == ('0:00', '0:17')
+    assert len(DbInteraction_worker.db.index) == 5
+    assert_frame_equal(DbInteraction_worker.db, result)
 
 
 def test_update_db_date_changed_during_session_short_break(DbInteraction_worker, monkeypatch):

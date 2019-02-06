@@ -5,7 +5,7 @@
 """
 
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from work_tracker.functions.helpfer_functions import str_datetime
 
@@ -20,6 +20,18 @@ def mock_time_long_break(*args):
 
 def mock_datetime_now(*args):
     return str_datetime("2017-08-08 18:29:33.0")
+
+
+def mock_var_time(offset=0, kind="numpy"):
+    def inner(*args):
+        if kind == "numpy":
+            return pd.to_datetime("2017-08-08 23:59:00") + \
+                   pd.Timedelta(offset, unit="m")
+        elif kind == "datetime":
+            return str_datetime("2017-08-08 23:59:00.0") + timedelta(minutes=offset)
+        else:
+            raise Exception(f"unsupported kind '{kind}', kind need to be 'numpy' or 'datetime'")
+    return inner
 
 
 class mockDatetimeNow(datetime):
