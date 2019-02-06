@@ -10,6 +10,7 @@ import pytest
 # import numpy as np
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
+from shutil import copyfile
 
 from work_tracker.functions.helpfer_functions import get_abs_path, str_datetime
 from work_tracker.functions.base_classes import DbBaseClass
@@ -53,53 +54,27 @@ def test_get_remote_db(DbBaseClass_worker, sftpserver, capsys):
 
 @pytest.fixture(scope="function")
 def test_data():
-    offline_df_path = get_abs_path("../tests/test_data/test_DF_offline.csv")
-    online_df_path = get_abs_path("../tests/test_data/test_DF_online.csv")
-    offline_df = pd.DataFrame([{"start": str_datetime("2017-08-06 18:24:33.324733"),
-                                "end": str_datetime("2017-08-06 18:34:33.324733"),
-                                "occupation": "RemEx"},
-                               {"start": str_datetime("2017-08-07 18:24:33.324733"),
-                                "end": str_datetime("2017-08-07 18:34:33.324733"),
-                                "occupation": "Inno"},
-                               {"start": str_datetime("2017-08-08 17:14:33.324733"),
-                                "end": str_datetime("2017-08-08 18:24:33.324733"),
-                                "occupation": "Inno"}])
-    offline_df.to_csv(offline_df_path, index=False, sep="\t")
-
-    online_df = pd.DataFrame([{"start": str_datetime("2017-08-06 18:24:33.324733"),
-                               "end": str_datetime("2017-08-06 18:44:33.324733"),
-                               "occupation": "Remex"},
-                              {"start": str_datetime("2017-08-07 18:24:33.324733"),
-                               "end": str_datetime("2017-08-07 18:34:33.324733"),
-                               "occupation": "Inno"},
-                              {"start": str_datetime("2017-08-09 17:14:33.324733"),
-                               "end": str_datetime("2017-08-09 18:24:33.324733"),
-                               "occupation": "OnPrEx"}])
-    online_df.to_csv(online_df_path, index=False, sep="\t")
-
-    result = pd.DataFrame([{"start": str_datetime("2017-08-06 18:24:33.324733"),
-                            "end": str_datetime("2017-08-06 18:44:33.324733"),
-                            "occupation": "RemEx"},
-                           {"start": str_datetime("2017-08-07 18:24:33.324733"),
-                            "end": str_datetime("2017-08-07 18:34:33.324733"),
-                            "occupation": "Inno"},
-                           {"start": str_datetime("2017-08-08 17:14:33.324733"),
-                            "end": str_datetime("2017-08-08 18:24:33.324733"),
-                            "occupation": "Inno"},
-                           {"start": str_datetime("2017-08-09 17:14:33.324733"),
-                            "end": str_datetime("2017-08-09 18:24:33.324733"),
-                            "occupation": "OnPrEx"}])
-    result = result.sort_values("start").reset_index(drop=True)
+    test_data_path = get_abs_path("../tests/test_data")
+    offline_df_path_src = os.path.join(test_data_path, "baseclass_offline_df.tsv")
+    online_df_path_src = os.path.join(test_data_path, "baseclass_online_df.tsv")
+    offline_df_path_dest = os.path.join(test_data_path, "test_DF_offline.csv")
+    online_df_path_dest = os.path.join(test_data_path, "test_DF_online.csv")
+    copyfile(offline_df_path_src, offline_df_path_dest)
+    copyfile(online_df_path_src, online_df_path_dest)
+    offline_df = pd.read_csv(offline_df_path_src, sep="\t", parse_dates=["start", "end"])
+    online_df = pd.read_csv(online_df_path_src, sep="\t", parse_dates=["start", "end"])
+    result = pd.read_csv(os.path.join(test_data_path, "baseclass_result.tsv"),
+                         sep="\t", parse_dates=["start", "end"])
     yield {"result": result,
            "offline_df": offline_df,
-           "offline_df_path": offline_df_path,
+           "offline_df_path": offline_df_path_dest,
            "online_df": online_df,
-           "online_df_path": online_df_path}
+           "online_df_path": online_df_path_dest}
     # file_cleanup
-    if os.path.isfile(offline_df_path):
-        os.remove(offline_df_path)
-    if os.path.isfile(online_df_path):
-        os.remove(online_df_path)
+    if os.path.isfile(offline_df_path_dest):
+        os.remove(offline_df_path_dest)
+    if os.path.isfile(online_df_path_dest):
+        os.remove(online_df_path_dest)
 
 
 @pytest.fixture()

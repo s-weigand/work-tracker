@@ -10,6 +10,7 @@ import datetime
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pytest
+from shutil import copyfile
 
 from work_tracker.functions.helpfer_functions import get_abs_path  # , debug_printer, seconds_to_hm
 from work_tracker.functions.calc_worktime import WorktimeCalculator
@@ -22,54 +23,24 @@ pd.options.display.max_colwidth = 50
 
 @pytest.fixture(scope="module")
 def data_test_cal():
-    test_df_path = get_abs_path("../tests/test_data/calc_worktime_test_DF.csv")
-    test_df = pd.DataFrame([
-        {"start": str_datetime("2017-08-06 23:24:33.324733"),
-         "end": str_datetime("2017-08-07 0:34:33.324733"),
-         "occupation": "RemEx"},
-        {"start": str_datetime("2017-08-07 18:24:33.324733"),
-         "end": str_datetime("2017-08-07 18:34:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-08 17:14:33.324733"),
-         "end": str_datetime("2017-08-08 18:24:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-11 17:14:33.324733"),
-         "end": str_datetime("2017-08-11 18:24:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-12 17:14:33.324733"),
-         "end": str_datetime("2017-08-12 18:24:33.324733"),
-         "occupation": "Inno"}])
-    test_df.to_csv(test_df_path, index=False, sep="\t")
 
-    result = pd.DataFrame([
-        {"start": str_datetime("2017-08-06 23:24:33.324733"),
-         "end": str_datetime("2017-08-07 0:0:0.0"),
-         "occupation": "RemEx"},
-        {"start": str_datetime("2017-08-07 0:0:0.0"),
-         "end": str_datetime("2017-08-07 0:34:33.324733"),
-         "occupation": "RemEx"},
-        {"start": str_datetime("2017-08-07 18:24:33.324733"),
-         "end": str_datetime("2017-08-07 18:34:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-08 17:14:33.324733"),
-         "end": str_datetime("2017-08-08 18:24:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-11 17:14:33.324733"),
-         "end": str_datetime("2017-08-11 18:24:33.324733"),
-         "occupation": "Inno"},
-        {"start": str_datetime("2017-08-12 17:14:33.324733"),
-         "end": str_datetime("2017-08-12 18:24:33.324733"),
-         "occupation": "Inno"}])
+    test_data_path = get_abs_path("../tests/test_data")
+    test_df_path_src = os.path.join(test_data_path, "calc_worktime_test_df.tsv")
+    test_df_path_dest = os.path.join(test_data_path, "calc_worktime_test_DF.csv")
+    copyfile(test_df_path_src, test_df_path_dest)
+    test_df = pd.read_csv(test_df_path_src, sep="\t", parse_dates=["start", "end"])
+    result = pd.read_csv(os.path.join(test_data_path, "calc_worktime_result.tsv"),
+                         sep = "\t", parse_dates = ["start", "end"])
     manual_df_path = get_abs_path("../tests/test_data/calc_worktime_manual_df_test.csv")
     manual_df = pd.read_csv(manual_df_path,
                             parse_dates=["start", "end"], sep="\t")
     yield {"result": result,
            "test_df": test_df,
-           "test_df_path": test_df_path,
+           "test_df_path": test_df_path_dest,
            "manual_df": manual_df}
     # file_cleanup
-    if os.path.isfile(test_df_path):
-        os.remove(test_df_path)
+    if os.path.isfile(test_df_path_dest):
+        os.remove(test_df_path_dest)
 
 
 @pytest.fixture(scope="function")

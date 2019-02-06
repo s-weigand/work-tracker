@@ -165,14 +165,13 @@ class WorktimeCalculator(DbBaseClass):
         if self.country in dir(holidays):
             # get holidays class depending on the country
             country_class = getattr(holidays, self.country)
-            # get holidays class depending on the country and province
+            # init holiday class depending province
             if self.province in country_class.PROVINCES:
                 custom_holidays = country_class(state=self.province)
             else:
                 custom_holidays = country_class()
             # update holidays with special_holidays, given in the config
             special_holiday_update_dict = {}
-            # for year in pd.unique(self.contact_worktime_df.index.year):
             for year in pd.unique(self.contract_worktime_df["start"].dt.year):
                 for key, val in self.special_holidays.items():
                     day = int(key.split("-")[0])
@@ -250,7 +249,8 @@ class WorktimeCalculator(DbBaseClass):
         return result_df[['start', 'end', 'worktime', 'year',
                           'month', "week", 'day', 'occupation']]
 
-    def add_time_columns(self, df, date_time_column="start"):
+    @classmethod
+    def add_time_columns(cls, df, date_time_column="start"):
         """
         Adds Year, Month, Week and Day columns to an existing Dataframe
 
