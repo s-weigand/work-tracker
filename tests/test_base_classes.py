@@ -4,15 +4,12 @@
 @author: Sebastian Weigand
 """
 
-import os
 import datetime
 import pytest
-# import numpy as np
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
-from shutil import copyfile
 
-from work_tracker.functions.helpfer_functions import get_abs_path, str_datetime
+from work_tracker.functions.helpfer_functions import str_datetime
 from work_tracker.functions.base_classes import DbBaseClass
 from tests.custom_mocks import (mock_time_short_break, mock_True, mock_pysftp_CnOpts,
                                 mockDatetimeNow)
@@ -20,7 +17,7 @@ from tests.custom_mocks import (mock_time_short_break, mock_True, mock_pysftp_Cn
 
 
 @pytest.fixture(scope="function")
-def DbBaseClass_worker(test_data, monkeypatch):
+def DbBaseClass_worker(test_data_base, monkeypatch):
     db_worker = DbBaseClass("../tests/test_data/test_user_config_update_work_db.ini")
     return db_worker
 
@@ -52,33 +49,8 @@ def test_get_remote_db(DbBaseClass_worker, sftpserver, capsys):
             assert retrived_file.read() == "test file content"
 
 
-@pytest.fixture(scope="function")
-def test_data():
-    test_data_path = get_abs_path("../tests/test_data")
-    offline_df_path_src = os.path.join(test_data_path, "baseclass_offline_df.tsv")
-    online_df_path_src = os.path.join(test_data_path, "baseclass_online_df.tsv")
-    offline_df_path_dest = os.path.join(test_data_path, "test_DF_offline.csv")
-    online_df_path_dest = os.path.join(test_data_path, "test_DF_online.csv")
-    copyfile(offline_df_path_src, offline_df_path_dest)
-    copyfile(online_df_path_src, online_df_path_dest)
-    offline_df = pd.read_csv(offline_df_path_src, sep="\t", parse_dates=["start", "end"])
-    online_df = pd.read_csv(online_df_path_src, sep="\t", parse_dates=["start", "end"])
-    result = pd.read_csv(os.path.join(test_data_path, "baseclass_result.tsv"),
-                         sep="\t", parse_dates=["start", "end"])
-    yield {"result": result,
-           "offline_df": offline_df,
-           "offline_df_path": offline_df_path_dest,
-           "online_df": online_df,
-           "online_df_path": online_df_path_dest}
-    # file_cleanup
-    if os.path.isfile(offline_df_path_dest):
-        os.remove(offline_df_path_dest)
-    if os.path.isfile(online_df_path_dest):
-        os.remove(online_df_path_dest)
-
-
 @pytest.fixture()
-def mocked_DbBaseClass_worker(test_data, monkeypatch):
+def mocked_DbBaseClass_worker(test_data_base, monkeypatch):
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_pandas_now',
                         mock_time_short_break)
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_remote_db',
@@ -114,20 +86,20 @@ def test_clean_db(mocked_DbBaseClass_worker):
     assert_frame_equal(mocked_DbBaseClass_worker.db, orig_db, check_exact=True)
 
 
-def test_load_db(mocked_DbBaseClass_worker, test_data):
+def test_load_db(mocked_DbBaseClass_worker, test_data_base):
     mocked_DbBaseClass_worker.db = mocked_DbBaseClass_worker.load_db(
         mocked_DbBaseClass_worker.db_path_offline)
-    assert_frame_equal(mocked_DbBaseClass_worker.db, test_data["offline_df"])
+    assert_frame_equal(mocked_DbBaseClass_worker.db, test_data_base["offline_df"])
 
 
-def test_merge_dbs(mocked_DbBaseClass_worker, test_data):
+def test_merge_dbs(mocked_DbBaseClass_worker, test_data_base):
     new_df = mocked_DbBaseClass_worker.merge_dbs()
     new_df = new_df.reset_index(drop=True)
-    assert_frame_equal(new_df, test_data["result"], check_exact=True)
+    assert_frame_equal(new_df, test_data_base["result"], check_exact=True)
 
 
-def test_merge_dbs_both_same(mocked_DbBaseClass_worker, test_data):
+def test_merge_dbs_both_same(mocked_DbBaseClass_worker, test_data_base):
     mocked_DbBaseClass_worker.db_path_online = mocked_DbBaseClass_worker.db_path_offline
     new_df = mocked_DbBaseClass_worker.merge_dbs()
     new_df = new_df.reset_index(drop=True)
-    assert_frame_equal(new_df, test_data["offline_df"], check_exact=True)
+    assert_frame_equal(new_df, test_data_base["offline_df"], check_exact=True)

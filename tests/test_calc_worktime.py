@@ -5,12 +5,10 @@ Created on Sat May 14 15:32:16 2016
 @author: Sebastian Weigand
 """
 
-import os
 import datetime
 import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pytest
-from shutil import copyfile
 
 from work_tracker.functions.helpfer_functions import get_abs_path  # , debug_printer, seconds_to_hm
 from work_tracker.functions.calc_worktime import WorktimeCalculator
@@ -21,30 +19,8 @@ pd.options.display.width = 300
 pd.options.display.max_colwidth = 50
 
 
-@pytest.fixture(scope="module")
-def data_test_cal():
-
-    test_data_path = get_abs_path("../tests/test_data")
-    test_df_path_src = os.path.join(test_data_path, "calc_worktime_test_df.tsv")
-    test_df_path_dest = os.path.join(test_data_path, "calc_worktime_test_DF.csv")
-    copyfile(test_df_path_src, test_df_path_dest)
-    test_df = pd.read_csv(test_df_path_src, sep="\t", parse_dates=["start", "end"])
-    result = pd.read_csv(os.path.join(test_data_path, "calc_worktime_result.tsv"),
-                         sep = "\t", parse_dates = ["start", "end"])
-    manual_df_path = get_abs_path("../tests/test_data/calc_worktime_manual_df_test.csv")
-    manual_df = pd.read_csv(manual_df_path,
-                            parse_dates=["start", "end"], sep="\t")
-    yield {"result": result,
-           "test_df": test_df,
-           "test_df_path": test_df_path_dest,
-           "manual_df": manual_df}
-    # file_cleanup
-    if os.path.isfile(test_df_path_dest):
-        os.remove(test_df_path_dest)
-
-
 @pytest.fixture(scope="function")
-def Calculator(monkeypatch, data_test_cal):
+def Calculator(monkeypatch, data_test_calc):
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.get_remote_db',
                         mock_True)
     monkeypatch.setattr('work_tracker.functions.base_classes.DbBaseClass.push_remote_db',
@@ -56,9 +32,9 @@ def Calculator(monkeypatch, data_test_cal):
     return Calculator
 
 
-def test_split_date_overlap_session(Calculator, data_test_cal):
+def test_split_date_overlap_session(Calculator, data_test_calc):
     Calculator.split_date_overlap_session()
-    assert_frame_equal(data_test_cal["result"], Calculator.db)
+    assert_frame_equal(data_test_calc["result"], Calculator.db)
 
 
 def test_get_holiday_df(Calculator):
@@ -70,11 +46,11 @@ def test_get_holiday_df(Calculator):
     assert_frame_equal(holidays_df, holiday_result[["start", "end", "occupation", "worktime"]])
 
 
-def test_get_manual_df_with_workime(Calculator, data_test_cal):
+def test_get_manual_df_with_workime(Calculator, data_test_calc):
     manual_df = Calculator.get_manual_df_with_workime()
-    data_test_cal["manual_df"].loc[:, "worktime"] = \
-        pd.to_timedelta(data_test_cal["manual_df"]["worktime"], unit="h")
-    assert_frame_equal(manual_df, data_test_cal["manual_df"])
+    data_test_calc["manual_df"].loc[:, "worktime"] = \
+        pd.to_timedelta(data_test_calc["manual_df"]["worktime"], unit="h")
+    assert_frame_equal(manual_df, data_test_calc["manual_df"])
 
 
 def test_init_holidays(Calculator):
