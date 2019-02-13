@@ -16,7 +16,7 @@ import holidays  # NOQA
 
 from .update_work_db import get_abs_path
 from .base_classes import DbBaseClass
-# from .helpfer_functions import debug_printer
+from .helpfer_functions import debug_printer
 
 
 class WorktimeCalculator(DbBaseClass):
@@ -78,15 +78,17 @@ class WorktimeCalculator(DbBaseClass):
             since the 1st contract started until now
         """
         contract_worktime_df = pd.DataFrame()
-        contract_info_df = pd.read_csv(self.contract_info_path, parse_dates=["start"], sep="\t")
+        contract_info_df = pd.read_csv(self.contract_info_path, parse_dates=["start", "end"], sep="\t")
+        # debug_printer(contract_info_df)
         for index, row in contract_info_df.iterrows():
-            if index < contract_info_df.shape[0]-1:
-                end_date = contract_info_df["start"].iloc[index + 1] - pd.to_timedelta("1D")
-            else:
+            if pd.isna(row["end"]):
                 end_date = self.db["end"].max()
+            else:
+                end_date = row["end"]
             business_days = CustomBusinessDay(weekmask=row["weekmask"])
             start_values = pd.Series(pd.date_range(row["start"], end_date,
                                                    normalize=True, freq=business_days))
+
 
             # calculate the daily worktime depending on the interval and weekmask
             daily_worktime = self.get_daily_worktime(row["frequenzy"],
@@ -96,7 +98,9 @@ class WorktimeCalculator(DbBaseClass):
             worktime_df["worktime"] = pd.to_timedelta(daily_worktime, unit="h")
             contract_worktime_df = contract_worktime_df.append(worktime_df)
 
-        return contract_worktime_df.sort_values("start").reset_index(drop=True)
+        # summing up worktime from different jobs at the same day
+        contract_worktime_df = contract_worktime_df.groupby("start")['worktime'].apply(lambda x: x.sum())
+        return contract_worktime_df.reset_index().sort_values("start")
 
     def get_daily_worktime(self, frequenzy, worktime, weekmask):
         """

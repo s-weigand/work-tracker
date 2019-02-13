@@ -93,7 +93,7 @@ def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
         ranged_stechkarte = stechkarte[((stechkarte["start"]>= sel_min_date) & (stechkarte["start"]<= sel_max_date))]
         for occupation in selected_dropdown_value:
             plotdata = ranged_stechkarte[ranged_stechkarte["occupation"] == occupation]
-            worktime = plotdata.resample('M', on='start').sum()["worktime"].apply(timedelt_to_float_h)
+            worktime = plotdata.resample('M', on='start').sum()["worktime"].apply(timedelt_to_float_h).round(2)
             if not worktime.empty:
                 plot_list.append({
                     'x': worktime.index,
@@ -102,7 +102,9 @@ def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
                     'type': 'bar'
                 })
         # Total
-        worktime = ranged_stechkarte.resample('M', on='start').sum()["worktime"].apply(timedelt_to_float_h)
+        worktime = ranged_stechkarte.resample('M', on='start').sum()["worktime"].apply(timedelt_to_float_h).round(2)
+
+        print("worktime", worktime, file=sys.stderr)
 
         plot_list.append(go.Scatter(
             x= worktime.index,
