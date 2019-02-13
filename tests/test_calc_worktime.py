@@ -10,7 +10,7 @@ import pandas as pd
 from pandas.util.testing import assert_frame_equal
 import pytest
 
-from work_tracker.functions.helpfer_functions import get_abs_path, debug_printer  # , seconds_to_hm
+from work_tracker.functions.helpfer_functions import get_abs_path  # debug_printer , seconds_to_hm
 from work_tracker.functions.calc_worktime import WorktimeCalculator
 from .test_update_work_db import str_datetime
 from .custom_mocks import mock_True, mock_pysftp_CnOpts
@@ -83,8 +83,8 @@ def test_generate_contract_worktime_df(Calculator):
     result_df.drop([1, 2], inplace=True)
     result_df.reset_index(drop=True, inplace=True)
     assert_frame_equal(contact_worktime_df, result_df[['start', 'worktime']])
-#
-#
+
+
 def test_get_total_df(Calculator):
     total_df = Calculator.get_total_df()
 

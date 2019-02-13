@@ -16,7 +16,7 @@ import holidays  # NOQA
 
 from .update_work_db import get_abs_path
 from .base_classes import DbBaseClass
-from .helpfer_functions import debug_printer
+# from .helpfer_functions import debug_printer
 
 
 class WorktimeCalculator(DbBaseClass):
@@ -78,7 +78,9 @@ class WorktimeCalculator(DbBaseClass):
             since the 1st contract started until now
         """
         contract_worktime_df = pd.DataFrame()
-        contract_info_df = pd.read_csv(self.contract_info_path, parse_dates=["start", "end"], sep="\t")
+        contract_info_df = pd.read_csv(self.contract_info_path,
+                                       parse_dates=["start", "end"],
+                                       sep="\t")
         # debug_printer(contract_info_df)
         for index, row in contract_info_df.iterrows():
             if pd.isna(row["end"]):
@@ -89,7 +91,6 @@ class WorktimeCalculator(DbBaseClass):
             start_values = pd.Series(pd.date_range(row["start"], end_date,
                                                    normalize=True, freq=business_days))
 
-
             # calculate the daily worktime depending on the interval and weekmask
             daily_worktime = self.get_daily_worktime(row["frequenzy"],
                                                      row["worktime"],
@@ -99,7 +100,8 @@ class WorktimeCalculator(DbBaseClass):
             contract_worktime_df = contract_worktime_df.append(worktime_df)
 
         # summing up worktime from different jobs at the same day
-        contract_worktime_df = contract_worktime_df.groupby("start")['worktime'].apply(lambda x: x.sum())
+        contract_worktime_df = contract_worktime_df.groupby("start")['worktime']\
+            .apply(lambda x: x.sum())
         return contract_worktime_df.reset_index().sort_values("start")
 
     def get_daily_worktime(self, frequenzy, worktime, weekmask):
