@@ -115,7 +115,7 @@ class DbBaseClass:
         """
         removes rows where the session work was less than 1min
         """
-        work_time = self.db["end"] - self.db["start"]
+        work_time = self.db["end"] - self.db["start"]  # pylint: disable=E0203
         real_work_period = work_time > pd.to_timedelta(1, unit="m")  # 1 minute
         self.db = self.db[real_work_period]
 

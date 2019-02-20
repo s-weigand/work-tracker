@@ -175,4 +175,3 @@ class DbInteraction(DbBaseClass):
         self.update_db_locale()
         # print("after update\n", self.db)
         self.push_remote_db()
-
