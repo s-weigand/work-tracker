@@ -6,6 +6,7 @@ from .UI_files.worktracker_main import WorkTracker
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     work_tracker = WorkTracker()
     work_tracker.show()

@@ -5,10 +5,12 @@
 """
 # import configparser
 import datetime
+
 # import os
 
 # import numpy as np
 import pandas as pd
+
 # import pysftp
 
 from .helpfer_functions import get_abs_path, seconds_to_hm, get_midnight_datetime
@@ -18,8 +20,8 @@ from .base_classes import DbBaseClass
 class DbInteraction(DbBaseClass):
     default_config_path = get_abs_path("default_config.ini")
 
-    def __init__(self,  user_config_path=".user_config.ini"):
-        super(self.__class__, self).__init__(user_config_path)
+    def __init__(self, user_config_path=".user_config.ini"):
+        super().__init__(user_config_path)
         self.occupation = "TestOccupation"
         self.load_config()
         self.update_now_and_tomorrow()
@@ -31,9 +33,15 @@ class DbInteraction(DbBaseClass):
         self.update_db_locale()
         self.clean_db()
         self.occupation = occupation
-        new_day_df = pd.DataFrame([{"start": self.get_pandas_now(),
-                                    "end": self.get_pandas_now(),
-                                    "occupation": self.occupation}])
+        new_day_df = pd.DataFrame(
+            [
+                {
+                    "start": self.get_pandas_now(),
+                    "end": self.get_pandas_now(),
+                    "occupation": self.occupation,
+                }
+            ]
+        )
         self.db = self.db.append(new_day_df, ignore_index=True)
         # just for writing changes to db
         self.update_db_locale()
@@ -62,10 +70,10 @@ class DbInteraction(DbBaseClass):
         """
         Loads the config files to obtain the login for the SFTP server and the last occupation
         """
-        config = super(self.__class__, self).load_config()
+        config = super().load_config()
 
         occupations = config.get("occupation", "occupations").split(",")
-        last_occupation = config.get('occupation', 'last_occupation')
+        last_occupation = config.get("occupation", "last_occupation")
         if last_occupation in occupations:
             self.occupation = last_occupation
 
@@ -77,10 +85,10 @@ class DbInteraction(DbBaseClass):
         Returns
         -------
         session_time : str
-             string representation in hours and minutes
+            string representation in hours and minutes
         """
-        today_db = self.db.loc[self.db['start'] >= self.today]
-        session_work = today_db["end"]-today_db["start"]
+        today_db = self.db.loc[self.db["start"] >= self.today]
+        session_work = today_db["end"] - today_db["start"]
         return seconds_to_hm(session_work.sum().seconds)
 
     def get_start_time(self):
@@ -91,48 +99,72 @@ class DbInteraction(DbBaseClass):
         %h:%M representation of the start time : str
             String representing start time as %h:%M
         """
-        today_db = self.db.loc[self.db['start'] >= self.today]
-        start_time = today_db["start"].min()-self.today
+        today_db = self.db.loc[self.db["start"] >= self.today]
+        start_time = today_db["start"].min() - self.today
         return seconds_to_hm(start_time.seconds)
 
     def update_db_locale(self):
         self.update_now_and_tomorrow()
         # case all session today
-        today_df = self.db[(self.db['start'] >= self.today) &
-                           (self.db['start'] < self.tomorrow)]
+        today_df = self.db[
+            (self.db["start"] >= self.today) & (self.db["start"] < self.tomorrow)
+        ]
         start_was_today = len(today_df.index)
         # case date changed during session
-        yesterday_df = self.db[(self.db['start'] >= self.yesterday) &
-                               (self.db['start'] < self.today)]
+        yesterday_df = self.db[
+            (self.db["start"] >= self.yesterday) & (self.db["start"] < self.today)
+        ]
         start_was_yesterday = len(yesterday_df.index)
         # short pause is less than 10min which prevents resets by crashes
         if start_was_today:
-            is_short_break = self.get_pandas_now() - today_df['end'].max() < \
-                             pd.to_timedelta("10m")  # 10 minutes
+            is_short_break = self.get_pandas_now() - today_df[
+                "end"
+            ].max() < pd.to_timedelta(
+                "10m"
+            )  # 10 minutes
         elif start_was_yesterday:
-            is_short_break = self.get_pandas_now() - yesterday_df['end'].max() < \
-                             pd.to_timedelta("10m")  # 10 minutes
+            is_short_break = self.get_pandas_now() - yesterday_df[
+                "end"
+            ].max() < pd.to_timedelta(
+                "10m"
+            )  # 10 minutes
         else:
             is_short_break = False
         if start_was_today and is_short_break:
-            irow = self.db["end"].isin([today_df['end'].values.max()])
+            irow = self.db["end"].isin([today_df["end"].values.max()])
             self.db.loc[irow, "end"] = self.get_pandas_now()
         elif start_was_yesterday and is_short_break:
-            irow = self.db["end"].isin([yesterday_df['end'].values.max()])
+            irow = self.db["end"].isin([yesterday_df["end"].values.max()])
             self.db.loc[irow, "end"] = self.today
-            new_day_df = pd.DataFrame([{"start": self.today,
-                                        "end": self.get_pandas_now(),
-                                        "occupation": self.occupation}])
+            new_day_df = pd.DataFrame(
+                [
+                    {
+                        "start": self.today,
+                        "end": self.get_pandas_now(),
+                        "occupation": self.occupation,
+                    }
+                ]
+            )
             self.db = self.db.append(new_day_df, ignore_index=True)
 
         else:
-            new_day_df = pd.DataFrame([{"start": self.get_pandas_now(),
-                                        "end": self.get_pandas_now(),
-                                        "occupation": self.occupation}])
+            new_day_df = pd.DataFrame(
+                [
+                    {
+                        "start": self.get_pandas_now(),
+                        "end": self.get_pandas_now(),
+                        "occupation": self.occupation,
+                    }
+                ]
+            )
             self.db = self.db.append(new_day_df, ignore_index=True)
         self.db.sort_values("start").reset_index(drop=True, inplace=True)
-        self.db.to_csv(self.db_path_offline, index=False,
-                       columns=["start", "end", "occupation"], sep="\t")
+        self.db.to_csv(
+            self.db_path_offline,
+            index=False,
+            columns=["start", "end", "occupation"],
+            sep="\t",
+        )
         return self.get_start_time(), self.get_session_time()
 
     def start_session(self):
@@ -144,13 +176,3 @@ class DbInteraction(DbBaseClass):
         # print("after update\n", self.db)
         self.push_remote_db()
 
-
-if __name__ == "__main__":
-    LOCALE_DB_PATH = get_abs_path("data/stechkarte_local.csv")
-    REMOTE_DB_PATH = get_abs_path("data/stechkarte.csv")
-
-    test = DbInteraction(LOCALE_DB_PATH, REMOTE_DB_PATH)
-    test.update_db_locale()
-    # test.get_remote_db()
-#    test.update_db_locale()
-    print(test.merge_dbs())

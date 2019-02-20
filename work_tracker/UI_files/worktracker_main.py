@@ -1,6 +1,7 @@
 # import os
 # import sys
 import configparser
+
 # import traceback
 from ..functions.update_work_db import DbInteraction, get_abs_path
 
@@ -10,6 +11,7 @@ from .auto_generated.UI_work_tracker import Ui_work_tracker
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
+
     def _fromUtf8(s):
         return s
 
@@ -18,6 +20,7 @@ class updateThread(QtCore.QThread):
     """
     Separate thread to not block the Ui while updating the database
     """
+
     update_signal = QtCore.pyqtSignal(tuple)
     push_signal = QtCore.pyqtSignal()
     change_occupation_signal = QtCore.pyqtSignal(str)
@@ -80,13 +83,17 @@ class WorkTracker(QtWidgets.QWidget, Ui_work_tracker):
         """
         try:
             config = configparser.ConfigParser()
-            config.read([self.default_config_path, self.user_config_path], encoding="utf-8")
+            config.read(
+                [self.default_config_path, self.user_config_path], encoding="utf-8"
+            )
             occupations = config.get("occupation", "occupations").split(",")
             self.occupation_comboBox.clear()
             self.occupation_comboBox.addItems(occupations)
-            last_occupation = config.get('occupation', 'last_occupation')
+            last_occupation = config.get("occupation", "last_occupation")
             if last_occupation in occupations:
-                last_occupation_index = self.occupation_comboBox.findText(last_occupation)
+                last_occupation_index = self.occupation_comboBox.findText(
+                    last_occupation
+                )
                 self.occupation_comboBox.setCurrentIndex(last_occupation_index)
                 self.change_occupation()
         except Exception:
@@ -100,9 +107,11 @@ class WorkTracker(QtWidgets.QWidget, Ui_work_tracker):
         try:
             last_occupation = self.occupation_comboBox.currentText()
             config = configparser.ConfigParser()
-            config.read([self.default_config_path, self.user_config_path], encoding="utf-8")
-            config.set('occupation', 'last_occupation', last_occupation)
-            with open(self.user_config_path, 'w', encoding="utf-8") as configfile:
+            config.read(
+                [self.default_config_path, self.user_config_path], encoding="utf-8"
+            )
+            config.set("occupation", "last_occupation", last_occupation)
+            with open(self.user_config_path, "w", encoding="utf-8") as configfile:
                 config.write(configfile)
         except Exception:
             print("last occupation couldn't be saved to config")

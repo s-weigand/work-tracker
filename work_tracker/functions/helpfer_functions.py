@@ -24,8 +24,7 @@ def get_abs_path(rel_path):
         absolute path evaluated from the relative path in respect to
         the path of the main file("work_tracker.pyw")
     """
-    return os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        "..", rel_path))
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", rel_path))
 
 
 def str_datetime(time_str):
@@ -76,7 +75,7 @@ def seconds_to_hm(seconds):
     %h:%M representation of the seconds : str
         String representing the seconds which where passed as %h:%M
     """
-    m, s = divmod(seconds, 60)
+    m, _ = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return "%d:%02d" % (h, m)
 
@@ -93,8 +92,8 @@ def debug_printer(arg):
     frame = inspect.currentframe()
     try:
         context = inspect.getframeinfo(frame.f_back).code_context
-        caller_lines = ''.join([line.strip() for line in context])
-        m = re.search(r'debug_printer\s*\((.+)\)$', caller_lines)
+        caller_lines = "".join([line.strip() for line in context])
+        m = re.search(r"debug_printer\s*\((.+)\)$", caller_lines)
         if m:
             caller_lines = m.group(1)
         padding = 50

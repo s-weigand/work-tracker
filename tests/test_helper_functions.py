@@ -7,9 +7,13 @@
 import os
 import datetime
 
-from work_tracker.functions.helpfer_functions import (get_abs_path, seconds_to_hm,
-                                                      str_datetime, get_midnight_datetime,
-                                                      debug_printer)
+from work_tracker.functions.helpfer_functions import (
+    get_abs_path,
+    seconds_to_hm,
+    str_datetime,
+    get_midnight_datetime,
+    debug_printer,
+)
 
 
 def test_str_datetime():
@@ -26,13 +30,14 @@ def test_get_midnight_datetime():
 
 def test_get_abs_path():
     abs_path = get_abs_path("")
-    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                             "../work_tracker"))
+    base_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "../work_tracker")
+    )
     assert abs_path == base_path
 
 
 def test_seconds_to_hm():
-    seconds = 3600+120+11
+    seconds = 3600 + 120 + 11
     assert seconds_to_hm(seconds) == "1:02"
 
 
@@ -40,10 +45,13 @@ def test_debug_printer(capsys):
     testvar = "testvar content"
     debug_printer(testvar)
     captured = capsys.readouterr()
-    assert captured.out == """
+    assert (
+        captured.out
+        == """
 ##################################################
 testvar
 ##################################################
 
 testvar content
 """
+    )

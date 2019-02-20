@@ -4,26 +4,30 @@
 @author: Sebastian Weigand
 """
 import os
+
 # import sys
 import datetime
+
 # import configparser
 
 # import numpy as np
 import pandas as pd
 from pandas.tseries.offsets import CustomBusinessDay
+
 # import pysftp
 import holidays  # NOQA
 
 from .update_work_db import get_abs_path
 from .base_classes import DbBaseClass
+
 # from .helpfer_functions import debug_printer
 
 
 class WorktimeCalculator(DbBaseClass):
     default_config_path = get_abs_path("default_config.ini")
 
-    def __init__(self,  user_config_path=".user_config.ini"):
-        super(self.__class__, self).__init__(user_config_path)
+    def __init__(self, user_config_path=".user_config.ini"):
+        super().__init__(user_config_path)
         self.special_holidays = {}
         self.load_config()
         self.db = self.load_db()
@@ -44,9 +48,13 @@ class WorktimeCalculator(DbBaseClass):
 
         """
         if self.get_remote_db() and os.path.isfile(self.db_path_online):
-            return pd.read_csv(self.db_path_online, parse_dates=["start", "end"], sep="\t")
+            return pd.read_csv(
+                self.db_path_online, parse_dates=["start", "end"], sep="\t"
+            )
         elif os.path.isfile(self.db_path_offline):
-            return pd.read_csv(self.db_path_offline, parse_dates=["start", "end"], sep="\t")
+            return pd.read_csv(
+                self.db_path_offline, parse_dates=["start", "end"], sep="\t"
+            )
         else:
             raise Exception("There was no proper database file provided")
 
@@ -55,14 +63,14 @@ class WorktimeCalculator(DbBaseClass):
         Loads the config files to obtain the login for the SFTP server, the last occupation,
 
         """
-        config = super(self.__class__, self).load_config()
+        config = super().load_config()
 
         self.manual_db_path = get_abs_path(config.get("paths", "manual_db"))
         self.contract_info_path = get_abs_path(config.get("paths", "contract_info"))
         self.country = config.get("location", "country", fallback="")
         self.province = config.get("location", "province", fallback="")
-        if 'special_holidays' in config.sections():
-            self.special_holidays = config._sections['special_holidays']
+        if "special_holidays" in config.sections():
+            self.special_holidays = config._sections["special_holidays"]
 
     def generate_contract_worktime_df(self):
         """
@@ -78,30 +86,34 @@ class WorktimeCalculator(DbBaseClass):
             since the 1st contract started until now
         """
         contract_worktime_df = pd.DataFrame()
-        contract_info_df = pd.read_csv(self.contract_info_path,
-                                       parse_dates=["start", "end"],
-                                       sep="\t")
+        contract_info_df = pd.read_csv(
+            self.contract_info_path, parse_dates=["start", "end"], sep="\t"
+        )
         # debug_printer(contract_info_df)
-        for index, row in contract_info_df.iterrows():
+        for _, row in contract_info_df.iterrows():
             if pd.isna(row["end"]):
                 end_date = self.db["end"].max()
             else:
                 end_date = row["end"]
             business_days = CustomBusinessDay(weekmask=row["weekmask"])
-            start_values = pd.Series(pd.date_range(row["start"], end_date,
-                                                   normalize=True, freq=business_days))
+            start_values = pd.Series(
+                pd.date_range(
+                    row["start"], end_date, normalize=True, freq=business_days
+                )
+            )
 
             # calculate the daily worktime depending on the interval and weekmask
-            daily_worktime = self.get_daily_worktime(row["frequenzy"],
-                                                     row["worktime"],
-                                                     row["weekmask"])
+            daily_worktime = self.get_daily_worktime(
+                row["frequenzy"], row["worktime"], row["weekmask"]
+            )
             worktime_df = pd.DataFrame({"start": start_values})
             worktime_df["worktime"] = pd.to_timedelta(daily_worktime, unit="h")
             contract_worktime_df = contract_worktime_df.append(worktime_df)
 
         # summing up worktime from different jobs at the same day
-        contract_worktime_df = contract_worktime_df.groupby("start")['worktime']\
-            .apply(lambda x: x.sum())
+        contract_worktime_df = contract_worktime_df.groupby("start")["worktime"].apply(
+            lambda x: x.sum()
+        )
         return contract_worktime_df.reset_index().sort_values("start")
 
     def get_daily_worktime(self, frequenzy, worktime, weekmask):
@@ -127,9 +139,9 @@ class WorktimeCalculator(DbBaseClass):
         # calculate the daily worktime depending on the interval and weekmask
         work_days_per_week = len(weekmask.split(" "))
         if frequenzy == "weekly":
-            daily_worktime = worktime/work_days_per_week
+            daily_worktime = worktime / work_days_per_week
         else:
-            daily_worktime = (worktime*12)/(365-52*(7-work_days_per_week))
+            daily_worktime = (worktime * 12) / (365 - 52 * (7 - work_days_per_week))
         return daily_worktime
 
     def get_holiday_df(self):
@@ -146,15 +158,16 @@ class WorktimeCalculator(DbBaseClass):
             the contract parameters for those days.
 
         """
-        is_holiday = (self.contract_worktime_df["start"].apply(lambda x: x in self.holidays))
+        is_holiday = self.contract_worktime_df["start"].apply(
+            lambda x: x in self.holidays
+        )
         holiday_df = self.contract_worktime_df[is_holiday].copy()
         holiday_df["end"] = holiday_df["start"]
         holiday_df["occupation"] = "holiday"
         holiday_df.sort_values("start", inplace=True)
-        return holiday_df[["start",
-                           "end",
-                           "occupation",
-                           "worktime"]].reset_index(drop=True)
+        return holiday_df[["start", "end", "occupation", "worktime"]].reset_index(
+            drop=True
+        )
 
     def init_holidays(self):
         """
@@ -204,9 +217,11 @@ class WorktimeCalculator(DbBaseClass):
             Dataframe containing the to a daily base expanded entry's of manual_df.
         """
         manual_df = pd.DataFrame()
-        manual_db = pd.read_csv(self.manual_db_path, parse_dates=["start", "end"], sep="\t")
+        manual_db = pd.read_csv(
+            self.manual_db_path, parse_dates=["start", "end"], sep="\t"
+        )
         # expand start and end date to a range of dates
-        for index, row in manual_db.iterrows():
+        for _, row in manual_db.iterrows():
             new_df = pd.DataFrame()
             new_df["start"] = pd.date_range(row["start"], row["end"], normalize=True)
             new_df["end"] = pd.date_range(row["start"], row["end"], normalize=True)
@@ -214,7 +229,7 @@ class WorktimeCalculator(DbBaseClass):
             manual_df = manual_df.append(new_df)
 
         # drop days which are holidays
-        work_day = (manual_df["start"].apply(lambda x: x not in self.holidays))
+        work_day = manual_df["start"].apply(lambda x: x not in self.holidays)
         manual_df = pd.merge(manual_df[work_day], self.contract_worktime_df, on="start")
         return manual_df.sort_values("start").reset_index(drop=True)
 
@@ -234,26 +249,34 @@ class WorktimeCalculator(DbBaseClass):
             2.1.1970 00:00:00   2.1.1970 02:00:00
         """
         # midnight of the start and end date, are at different dates
-        overlap_sessions = self.db["start"].dt.normalize() != self.db["end"].dt.normalize()
+        overlap_sessions = (
+            self.db["start"].dt.normalize() != self.db["end"].dt.normalize()
+        )
         # copy overlapping part from the df
         df_to_append = self.db[overlap_sessions].copy()
         # set start date of the df to append to midnight
         df_to_append.loc[:, "start"] = df_to_append["end"].dt.normalize()
         # set the end date of the overlapping df to midnight
-        self.db.loc[overlap_sessions, "end"] = self.db[overlap_sessions]["end"].dt.normalize()
+        self.db.loc[overlap_sessions, "end"] = self.db[overlap_sessions][
+            "end"
+        ].dt.normalize()
         self.db = self.db.append(df_to_append)
-        self.db = self.db[(self.db["end"] - self.db["start"]) > pd.to_timedelta(1, unit="m")]
+        self.db = self.db[
+            (self.db["end"] - self.db["start"]) > pd.to_timedelta(1, unit="m")
+        ]
         self.db = self.db.sort_values("start").reset_index(drop=True)
 
     def get_total_df(self):
         self.db["worktime"] = self.db["end"] - self.db["start"]
-        result_df = pd.concat([self.db, self.get_holiday_df(),
-                               self.get_manual_df_with_workime()], sort=False)
+        result_df = pd.concat(
+            [self.db, self.get_holiday_df(), self.get_manual_df_with_workime()],
+            sort=False,
+        )
         result_df = self.add_time_columns(result_df)
-        result_df = result_df.sort_values(["start",
-                                           "end"]).reset_index(drop=True)
-        return result_df[['start', 'end', 'worktime', 'year',
-                          'month', "week", 'day', 'occupation']]
+        result_df = result_df.sort_values(["start", "end"]).reset_index(drop=True)
+        return result_df[
+            ["start", "end", "worktime", "year", "month", "week", "day", "occupation"]
+        ]
 
     @classmethod
     def add_time_columns(cls, df, date_time_column="start"):
@@ -293,13 +316,18 @@ class WorktimeCalculator(DbBaseClass):
             Dataframe with a DateDimeIndex, columns named by occupation and
             containing the worktime of that occupation for the samplingrate
         """
-        total_df = self.get_total_df().sort_values(date_time_column).reset_index(drop=True)
-        plot_df = pd.DataFrame(total_df.resample(rule, on=date_time_column).worktime.sum())
+        total_df = (
+            self.get_total_df().sort_values(date_time_column).reset_index(drop=True)
+        )
+        plot_df = pd.DataFrame(
+            total_df.resample(rule, on=date_time_column).worktime.sum()
+        )
         plot_df.columns = ["total"]
         for occupation in total_df["occupation"].unique():
             occupation_series = total_df[total_df["occupation"] == occupation]
-            occupation_series = occupation_series.resample(rule,
-                                                           on=date_time_column).worktime.sum()
+            occupation_series = occupation_series.resample(
+                rule, on=date_time_column
+            ).worktime.sum()
             occupation_series = occupation_series.rename(occupation)
             plot_df = plot_df.join(occupation_series)
         return plot_df.fillna(pd.Timedelta(seconds=0))
