@@ -33,7 +33,10 @@ def test_get_abs_path():
     base_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), "../work_tracker")
     )
-    assert abs_path == base_path
+    assert os.path.isabs(abs_path)
+    # looks starnage but with the drive letter beeing capital or
+    # not this caused problems ...
+    assert os.path.relpath(abs_path, base_path) == "."
 
 
 def test_seconds_to_hm():
