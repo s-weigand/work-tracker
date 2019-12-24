@@ -120,7 +120,7 @@ def test_update_db_with_day_change_and_running_update(
             },
         ]
     )
-    result = db_before.append(new_row, ignore_index=True)
+    result = db_before.append(new_row, ignore_index=True, sort=False)
     assert session_time == ("0:00", "0:17")
     assert len(DbInteraction_worker.db.index) == 5
     assert_frame_equal(DbInteraction_worker.db, result)
@@ -146,7 +146,7 @@ def test_update_db_date_changed_during_session_short_break(
             }
         ]
     )
-    DbInteraction_worker.db = DbInteraction_worker.db.append(new_row)
+    DbInteraction_worker.db = DbInteraction_worker.db.append(new_row, sort=False)
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ("0:00", "0:05")
     assert len(DbInteraction_worker.db.index) == 5
@@ -172,7 +172,7 @@ def test_update_db_date_changed_during_session_long_break(
             }
         ]
     )
-    DbInteraction_worker.db = DbInteraction_worker.db.append(new_row)
+    DbInteraction_worker.db = DbInteraction_worker.db.append(new_row, sort=False)
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ("0:05", "0:00")
     assert len(DbInteraction_worker.db.index) == 5
@@ -216,7 +216,9 @@ def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data_b
             }
         ]
     )
-    result = test_data_base["result"].copy().append(new_row, ignore_index=True)
+    result = (
+        test_data_base["result"].copy().append(new_row, ignore_index=True, sort=False)
+    )
     result.sort_values("start").reset_index(drop=True, inplace=True)
     DbInteraction_worker.occupation = "TestOccupation"
     DbInteraction_worker.start_session()
@@ -243,6 +245,6 @@ def test_change_occupation(DbInteraction_worker, monkeypatch):
             }
         ]
     )
-    new_db = new_db.append(new_day_df, ignore_index=True)
+    new_db = new_db.append(new_day_df, ignore_index=True, sort=False)
     DbInteraction_worker.change_occupation("RemEx")
     assert_frame_equal(DbInteraction_worker.db, new_db, check_exact=True)

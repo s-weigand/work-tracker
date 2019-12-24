@@ -110,7 +110,7 @@ def test_clean_db(mocked_DbBaseClass_worker):
         ]
     )
     mocked_DbBaseClass_worker.db = mocked_DbBaseClass_worker.db.append(
-        new_row, ignore_index=True
+        new_row, ignore_index=True, sort=False
     ).copy()
     mocked_DbBaseClass_worker.clean_db()
     assert_frame_equal(mocked_DbBaseClass_worker.db, orig_db, check_exact=True)
