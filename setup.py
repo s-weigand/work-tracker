@@ -33,6 +33,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
+    python_requires=">=3.6",
     description="Simple tool to keep track of your work time and/or productivity ",
     entry_points={
         'console_scripts': [
