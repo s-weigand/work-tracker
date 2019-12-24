@@ -11,7 +11,7 @@ from work_tracker.functions.helpfer_functions import str_datetime
 
 
 def mock_time_short_break(*args):
-    return pd.to_datetime("2017-08-08 18:29:33")  # 5min
+    return pd.to_datetime("2017-08-08 18:29:33.0")  # 5min
 
 
 def mock_time_long_break(*args):
