@@ -8,57 +8,66 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_work_tracker(object):
     def setupUi(self, work_tracker):
         work_tracker.setObjectName("work_tracker")
         work_tracker.resize(307, 166)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(work_tracker.sizePolicy().hasHeightForWidth())
         work_tracker.setSizePolicy(sizePolicy)
         work_tracker.setMaximumSize(QtCore.QSize(307, 166))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/inno_admin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(
+            QtGui.QPixmap(":/icons/inno_admin.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off
+        )
         work_tracker.setWindowIcon(icon)
-        work_tracker.setStyleSheet("#work_tracker{\n"
-"    margin:0px;\n"
-"    padding:0px;\n"
-"}\n"
-"QGroupBox{\n"
-"font: 12pt \"Times New Roman\";\n"
-"}\n"
-"QPushButton{\n"
-"font: 75 20pt \"Times New Roman\";\n"
-"}\n"
-"QComboBox{\n"
-"border:                    none;\n"
-"background-color:  rgba(255, 0, 0, 0);\n"
-"font-weight:            bold;\n"
-"padding-left:           5px;\n"
-"}\n"
-"QComboBox::drop-down{\n"
-"    border:                 none;\n"
-"    background-color:   rgba(255, 0, 0, 0);\n"
-"    font-weight:            bold;\n"
-"    margin-right:        5px;\n"
-"}\n"
-"\n"
-"QComboBox::down-arrow{\n"
-"    image:                      url(:/icons/down_arrow.svg);\n"
-"    width:                    16px;\n"
-"    height:                    16px;\n"
-"    padding:                    10px;\n"
-"}\n"
-"*{\n"
-"font:                        bold;\n"
-"}")
+        work_tracker.setStyleSheet(
+            "#work_tracker{\n"
+            "    margin:0px;\n"
+            "    padding:0px;\n"
+            "}\n"
+            "QGroupBox{\n"
+            'font: 12pt "Times New Roman";\n'
+            "}\n"
+            "QPushButton{\n"
+            'font: 75 20pt "Times New Roman";\n'
+            "}\n"
+            "QComboBox{\n"
+            "border:                    none;\n"
+            "background-color:  rgba(255, 0, 0, 0);\n"
+            "font-weight:            bold;\n"
+            "padding-left:           5px;\n"
+            "}\n"
+            "QComboBox::drop-down{\n"
+            "    border:                 none;\n"
+            "    background-color:   rgba(255, 0, 0, 0);\n"
+            "    font-weight:            bold;\n"
+            "    margin-right:        5px;\n"
+            "}\n"
+            "\n"
+            "QComboBox::down-arrow{\n"
+            "    image:                      url(:/icons/down_arrow.svg);\n"
+            "    width:                    16px;\n"
+            "    height:                    16px;\n"
+            "    padding:                    10px;\n"
+            "}\n"
+            "*{\n"
+            "font:                        bold;\n"
+            "}"
+        )
         self.gridLayout = QtWidgets.QGridLayout(work_tracker)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(5)
         self.gridLayout.setObjectName("gridLayout")
         self.start_btn = QtWidgets.QPushButton(work_tracker)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.start_btn.sizePolicy().hasHeightForWidth())
@@ -83,7 +92,9 @@ class Ui_work_tracker(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.session_time = QtWidgets.QLCDNumber(self.session_box)
         self.session_time.setEnabled(True)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.session_time.sizePolicy().hasHeightForWidth())
@@ -96,7 +107,9 @@ class Ui_work_tracker(object):
         self.verticalLayout.addWidget(self.session_time)
         self.gridLayout.addWidget(self.session_box, 1, 1, 1, 1)
         self.startBox = QtWidgets.QGroupBox(work_tracker)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.startBox.sizePolicy().hasHeightForWidth())
@@ -108,7 +121,9 @@ class Ui_work_tracker(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.startBox)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.start_time = QtWidgets.QLCDNumber(self.startBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.start_time.sizePolicy().hasHeightForWidth())
@@ -153,14 +168,15 @@ class Ui_work_tracker(object):
         self.occupation_comboBox.setItemText(2, _translate("work_tracker", "Inno"))
         self.occupation_label.setText(_translate("work_tracker", "Occupation:"))
 
+
 from . import icons_rc
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     work_tracker = QtWidgets.QWidget()
     ui = Ui_work_tracker()
     ui.setupUi(work_tracker)
     work_tracker.show()
     sys.exit(app.exec_())
-
