@@ -1,10 +1,8 @@
 pip>=18.1
-bumpversion>=0.5.3
-twine>=1.12.1
+bump2version>=0.5.11
 wheel>=0.32.1
-watchdog>=0.9.0
 # code formating
-black>=18.9b0
+black>=19.10b0
 # test requirements
 flake8>=3.5.0
 tox>=3.5.2
@@ -15,5 +13,11 @@ coverage>=4.5.1
 # docs requirements
 sphinx-rtd-theme>=0.3.1
 Sphinx>=1.8.1
-
-
+# runtime requirements
+# fixed so the bot can create PRs to test with new versions
+Click==6.5
+pandas==0.23.4
+PyQt5==5.10.0
+pysftp==0.2.9
+holidays==0.9.8
+dash==0.37.0
