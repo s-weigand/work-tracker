@@ -11,17 +11,17 @@ from work_tracker.functions.helpfer_functions import get_abs_path
 @pytest.fixture(scope="module")
 def data_test_calc():
 
-    test_data_path = get_abs_path("../tests/test_data")
-    test_df_path_src = os.path.join(test_data_path, "calc_worktime_test_df.tsv")
-    test_df_path_dest = os.path.join(test_data_path, "calc_worktime_test_DF.csv")
+    test_data_path = get_abs_path("../tests/test_data/calc_worktime")
+    test_df_path_src = os.path.join(test_data_path, "base_remote_df.tsv")
+    test_df_path_dest = os.path.join(test_data_path, "remote_db.tsv")
     copyfile(test_df_path_src, test_df_path_dest)
     test_df = pd.read_csv(test_df_path_src, sep="\t", parse_dates=["start", "end"])
     result = pd.read_csv(
-        os.path.join(test_data_path, "calc_worktime_result.tsv"),
+        os.path.join(test_data_path, "base_result.tsv"),
         sep="\t",
         parse_dates=["start", "end"],
     )
-    manual_df_path = get_abs_path("../tests/test_data/calc_worktime_manual_df_test.csv")
+    manual_df_path = os.path.join(test_data_path, "result_manual_db.tsv")
     manual_df = pd.read_csv(manual_df_path, parse_dates=["start", "end"], sep="\t")
     yield {
         "result": result,
@@ -36,11 +36,11 @@ def data_test_calc():
 
 @pytest.fixture(scope="function")
 def test_data_base():
-    test_data_path = get_abs_path("../tests/test_data")
+    test_data_path = get_abs_path("../tests/test_data/update_data")
     offline_df_path_src = os.path.join(test_data_path, "baseclass_offline_df.tsv")
     online_df_path_src = os.path.join(test_data_path, "baseclass_online_df.tsv")
-    offline_df_path_dest = os.path.join(test_data_path, "test_DF_offline.csv")
-    online_df_path_dest = os.path.join(test_data_path, "test_DF_online.csv")
+    offline_df_path_dest = os.path.join(test_data_path, "local_db.tsv")
+    online_df_path_dest = os.path.join(test_data_path, "remote_db.tsv")
     copyfile(offline_df_path_src, offline_df_path_dest)
     copyfile(online_df_path_src, online_df_path_dest)
     offline_df = pd.read_csv(

@@ -65,8 +65,9 @@ class WorktimeCalculator(DbBaseClass):
         """
         config = super().load_config()
 
-        self.manual_db_path = get_abs_path(config.get("paths", "manual_db"))
-        self.contract_info_path = get_abs_path(config.get("paths", "contract_info"))
+
+        self.manual_db_path = os.path.join(self.data_folder_path, "manual_db.tsv")
+        self.contract_info_path = os.path.join(self.data_folder_path, "contract_info.tsv")
         self.country = config.get("location", "country", fallback="")
         self.province = config.get("location", "province", fallback="")
         if "special_holidays" in config.sections():

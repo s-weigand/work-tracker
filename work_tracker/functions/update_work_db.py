@@ -42,7 +42,7 @@ class DbInteraction(DbBaseClass):
                 }
             ]
         )
-        self.db = self.db.append(new_day_df, ignore_index=True)
+        self.db = self.db.append(new_day_df, ignore_index=True, sort=False)
         # just for writing changes to db
         self.update_db_locale()
 
@@ -145,7 +145,7 @@ class DbInteraction(DbBaseClass):
                     }
                 ]
             )
-            self.db = self.db.append(new_day_df, ignore_index=True)
+            self.db = self.db.append(new_day_df, ignore_index=True, sort=False)
 
         else:
             new_day_df = pd.DataFrame(
@@ -157,7 +157,7 @@ class DbInteraction(DbBaseClass):
                     }
                 ]
             )
-            self.db = self.db.append(new_day_df, ignore_index=True)
+            self.db = self.db.append(new_day_df, ignore_index=True, sort=False)
         self.db.sort_values("start").reset_index(drop=True, inplace=True)
         self.db.to_csv(
             self.db_path_offline,

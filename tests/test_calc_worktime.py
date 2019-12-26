@@ -110,7 +110,9 @@ def test_generate_contract_worktime_df(Calculator):
 def test_get_total_df(Calculator):
     total_df = Calculator.get_total_df()
 
-    result_path = get_abs_path("../tests/test_data/calc_worktime_total_df_test.csv")
+    result_path = get_abs_path(
+        "../tests/test_data/calc_worktime/result_total_df.tsv"
+    )
     result_df = pd.read_csv(
         result_path,
         parse_dates=["start", "end"],
@@ -123,7 +125,7 @@ def test_get_total_df(Calculator):
 def test_get_plot_df(Calculator):
     plot_df = Calculator.get_plot_df()
     plot_df.reset_index(inplace=True)
-    result_path = get_abs_path("../tests/test_data/calc_worktime_plot_df_test.csv")
+    result_path = get_abs_path("../tests/test_data/calc_worktime/result_plot_df.tsv")
     result = pd.read_csv(
         result_path,
         sep="\t",

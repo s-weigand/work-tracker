@@ -49,12 +49,12 @@ class DbBaseClass:
         config = configparser.ConfigParser()
         config.read([self.default_config_path, self.user_config_path])
 
-        self.db_path_offline = get_abs_path(
-            config.get("paths", "offline_db", fallback="../data/stechkarte_local.csv")
+        self.data_folder_path = get_abs_path(
+            config.get("paths", "data_folder", fallback="../data")
         )
-        self.db_path_online = get_abs_path(
-            config.get("paths", "online_db", fallback="../data/stechkarte.csv")
-        )
+
+        self.db_path_offline = os.path.join(self.data_folder_path, "local_db.tsv")
+        self.db_path_online = os.path.join(self.data_folder_path, "remote_db.tsv")
 
         host = config.get("login", "host")
         username = config.get("login", "username")
