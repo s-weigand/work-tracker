@@ -65,9 +65,6 @@ class WorktimeCalculator(DbBaseClass):
         """
         config = super().load_config()
 
-
-        self.manual_db_path = os.path.join(self.data_folder_path, "manual_db.tsv")
-        self.contract_info_path = os.path.join(self.data_folder_path, "contract_info.tsv")
         self.country = config.get("location", "country", fallback="")
         self.province = config.get("location", "province", fallback="")
         if "special_holidays" in config.sections():
@@ -81,7 +78,6 @@ class WorktimeCalculator(DbBaseClass):
 
         Returns
         -------
-
         contract_worktime_df:  pandas.DataFrame
             Dataframe containing all workdays and their mean daily working time,
             since the 1st contract started until now

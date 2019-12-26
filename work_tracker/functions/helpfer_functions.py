@@ -3,6 +3,7 @@
 @file: helperfunctions.py
 @author: Sebastian Weigand
 """
+import hashlib
 import os
 import datetime
 import inspect
@@ -72,12 +73,31 @@ def seconds_to_hm(seconds):
 
     Returns
     -------
-    %h:%M representation of the seconds : str
-        String representing the seconds which where passed as %h:%M
+    str
+        String representing of seconds, in the form of %h:%M
     """
     m, _ = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return "%d:%02d" % (h, m)
+
+
+def hash_file(file_path):
+    """
+    Calculates the md5 hash value of the file at file_path.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to the file that should be hashed.
+
+    Returns
+    -------
+    str
+        MD5 hex  hash value of the file at file_path.
+    """
+    with open(file_path, 'rb') as file:
+        hash_val = hashlib.md5(file.read())
+    return hash_val.hexdigest()
 
 
 def debug_printer(arg):

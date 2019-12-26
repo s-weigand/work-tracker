@@ -1,0 +1,3 @@
+name	start	end	worktime	frequenzy	weekmask
+job1	2017-08-04	2017-08-12	40	weekly	"Mon Tue Wed Thu Fri"
+job2	2017-08-11		8.75	monthly	"Thu Fri"

@@ -3,7 +3,6 @@
 @file: base_classes.py
 @author: Sebastian Weigand
 """
-
 import configparser
 import datetime
 import os
@@ -12,7 +11,7 @@ import os
 import pandas as pd
 import pysftp
 
-from .helpfer_functions import get_abs_path
+from .helpfer_functions import get_abs_path, hash_file
 
 
 class DbBaseClass:
@@ -55,6 +54,18 @@ class DbBaseClass:
 
         self.db_path_offline = os.path.join(self.data_folder_path, "local_db.tsv")
         self.db_path_online = os.path.join(self.data_folder_path, "remote_db.tsv")
+        self.manual_db_path = os.path.join(self.data_folder_path, "manual_db.tsv")
+        self.contract_info_path = os.path.join(
+            self.data_folder_path, "contract_info.tsv"
+        )
+
+        self.local_files = pd.DataFrame(
+            {
+                "local_db": {"path": self.db_path_offline},
+                "manual_db": {"path": self.manual_db_path},
+                "contract_info": {"path": self.contract_info_path},
+            }
+        ).T
 
         host = config.get("login", "host")
         username = config.get("login", "username")
@@ -118,6 +129,11 @@ class DbBaseClass:
         work_time = self.db["end"] - self.db["start"]  # pylint: disable=E0203
         real_work_period = work_time > pd.to_timedelta(1, unit="m")  # 1 minute
         self.db = self.db[real_work_period]
+
+    def calc_file_hashes(self):
+        local_files = self.local_files.copy()
+        local_files["hashes"] = local_files["path"].apply(hash_file)
+        return local_files
 
     def get_remote_db(self):
         """
