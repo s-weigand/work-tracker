@@ -21,7 +21,9 @@ server.secret_key = os.environ.get("secret_key", "secret")
 
 
 stechkarte = pd.read_csv(
-    "../../mydata/.stechkarte_local.csv", sep="\t", parse_dates=["start", "end"]
+    os.path.join(os.path.dirname(__file__), "../../mydata/.stechkarte_local.csv"),
+    sep="\t",
+    parse_dates=["start", "end"],
 )
 stechkarte["worktime"] = stechkarte["end"] - stechkarte["start"]
 
