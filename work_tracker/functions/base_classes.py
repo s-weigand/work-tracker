@@ -166,7 +166,7 @@ class DbBaseClass:
         try:
             with pysftp.Connection(**self.login_dict) as sftp:
                 sftp.put(
-                    self.db_path_offline, remotepath=self.db_path, preserve_mtime=False
+                    self.db_path_offline, remotepath=self.db_path, preserve_mtime=True
                 )
             return True
         except Exception:

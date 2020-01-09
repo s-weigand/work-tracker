@@ -1,11 +1,10 @@
-Module documentation
-====================
+==============
+Inner workings
+==============
 
-.. currentmodule:: work_tracker.functions.base_classes
+.. toctree::
+    :maxdepth: 2
+    :caption: For Developers:
 
-.. autosummary::
-   :nosignatures:
-   :toctree: api/
-
-   DbBaseClass
-
+    modules_functions
+    modules_GUI
