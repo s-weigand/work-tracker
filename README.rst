@@ -14,9 +14,9 @@ work-tracker
         :target: https://work-tracker.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/s-weigand/work-tracker/shield.svg
-        :target: https://pyup.io/repos/github/s-weigand/work-tracker/
-        :alt: Updates
+.. image:: https://api.dependabot.com/badges/status?host=github&repo=s-weigand/work-tracker
+        :target: https://dependabot.com
+        :alt: Dependabot Status
 
 .. image:: https://codecov.io/gh/s-weigand/work-tracker/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/s-weigand/work-tracker
