@@ -55,7 +55,10 @@ templates_path = ["_templates"]
 # source_suffix = ['.rst', '.md']
 source_suffix = ".rst"
 
-linkcheck_ignore = [r"https://github\.com/s-weigand/work-tracker/actions"]
+linkcheck_ignore = [
+    r"https://github\.com/s-weigand/work-tracker/actions",
+    r"https://github\.com/s-weigand/work-tracker/workflows/Tests/badge\.svg",
+]
 # The master toctree document.
 master_doc = "index"
 
