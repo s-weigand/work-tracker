@@ -169,10 +169,10 @@ class DbInteraction(DbBaseClass):
 
     def start_session(self):
         self.get_remote_db()
-        self.local_files = self.calc_file_hashes()
         # print("b4 merge\n", self.db)
         self.db = self.merge_dbs()
         # print("b4 update\n", self.db)
         self.update_db_locale()
+        self.local_files = self.calc_file_hashes()
         # print("after update\n", self.db)
         self.push_remote_db()

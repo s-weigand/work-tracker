@@ -8,6 +8,7 @@ import os
 import datetime
 import inspect
 import re
+from warnings import warn
 
 
 def get_abs_path(rel_path):
@@ -47,7 +48,7 @@ def str_datetime(time_str):
 
 def get_midnight_datetime(datetime_obj):
     """
-    Helperfunction to get the date at exactly midnight for a given datime object
+    Helperfunction to get the date at exactly midnight for a given datetime object
 
     Parameters
     ----------
@@ -95,9 +96,12 @@ def hash_file(file_path):
     str
         MD5 hex  hash value of the file at file_path.
     """
-    with open(file_path, 'rb') as file:
-        hash_val = hashlib.md5(file.read())
-    return hash_val.hexdigest()
+    if os.path.isfile(file_path):
+        with open(file_path, "rb") as file:
+            hash_val = hashlib.md5(file.read())
+        return hash_val.hexdigest()
+    else:
+        warn(UserWarning(f"The file {file_path} does not exist."))
 
 
 def debug_printer(arg):
