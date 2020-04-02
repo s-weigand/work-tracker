@@ -20,4 +20,4 @@ pandas==1.0.3
 PyQt5==5.14.1
 pysftp==0.2.9
 holidays==0.10.1
-dash==1.9.1
+dash==1.10.0
