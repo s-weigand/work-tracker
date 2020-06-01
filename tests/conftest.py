@@ -5,6 +5,7 @@ from shutil import copyfile
 
 from work_tracker.functions.helpfer_functions import get_abs_path
 
+
 # ###########################
 # #     DATA FIXTURES       #
 # ###########################
