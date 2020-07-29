@@ -113,7 +113,7 @@ def test_clean_db(mocked_DbBaseClass_worker):
         new_row, ignore_index=True, sort=False
     ).copy()
     mocked_DbBaseClass_worker.clean_db()
-    assert_frame_equal(mocked_DbBaseClass_worker.db, orig_db, check_exact=True)
+    assert_frame_equal(mocked_DbBaseClass_worker.db, orig_db)
 
 
 def test_load_db(mocked_DbBaseClass_worker, test_data_base):
@@ -126,11 +126,11 @@ def test_load_db(mocked_DbBaseClass_worker, test_data_base):
 def test_merge_dbs(mocked_DbBaseClass_worker, test_data_base):
     new_df = mocked_DbBaseClass_worker.merge_dbs()
     new_df = new_df.reset_index(drop=True)
-    assert_frame_equal(new_df, test_data_base["result"], check_exact=True)
+    assert_frame_equal(new_df, test_data_base["result"])
 
 
 def test_merge_dbs_both_same(mocked_DbBaseClass_worker, test_data_base):
     mocked_DbBaseClass_worker.db_path_online = mocked_DbBaseClass_worker.db_path_offline
     new_df = mocked_DbBaseClass_worker.merge_dbs()
     new_df = new_df.reset_index(drop=True)
-    assert_frame_equal(new_df, test_data_base["offline_df"], check_exact=True)
+    assert_frame_equal(new_df, test_data_base["offline_df"])

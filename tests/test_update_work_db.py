@@ -222,7 +222,7 @@ def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data_b
     result.sort_values("start").reset_index(drop=True, inplace=True)
     DbInteraction_worker.occupation = "TestOccupation"
     DbInteraction_worker.start_session()
-    assert_frame_equal(DbInteraction_worker.db, result, check_exact=True)
+    assert_frame_equal(DbInteraction_worker.db, result)
 
 
 def test_change_occupation(DbInteraction_worker, monkeypatch):
@@ -247,4 +247,4 @@ def test_change_occupation(DbInteraction_worker, monkeypatch):
     )
     new_db = new_db.append(new_day_df, ignore_index=True, sort=False)
     DbInteraction_worker.change_occupation("RemEx")
-    assert_frame_equal(DbInteraction_worker.db, new_db, check_exact=True)
+    assert_frame_equal(DbInteraction_worker.db, new_db)
