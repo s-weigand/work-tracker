@@ -1,7 +1,8 @@
 import os
+from shutil import copyfile
+
 import pandas as pd
 import pytest
-from shutil import copyfile
 
 from work_tracker.functions.helpfer_functions import get_abs_path
 
@@ -16,14 +17,14 @@ def data_test_calc():
     test_df_path_src = os.path.join(test_data_path, "base_remote_df.tsv")
     test_df_path_dest = os.path.join(test_data_path, "remote_db.tsv")
     copyfile(test_df_path_src, test_df_path_dest)
-    test_df = pd.read_csv(test_df_path_src, sep="\t", parse_dates=["start", "end"])
+    test_df = pd.read_csv(test_df_path_src, sep="\t", parse_dates=["start", "end"])  # type:ignore
     result = pd.read_csv(
         os.path.join(test_data_path, "base_result.tsv"),
         sep="\t",
-        parse_dates=["start", "end"],
+        parse_dates=["start", "end"],  # type:ignore
     )
     manual_df_path = os.path.join(test_data_path, "result_manual_db.tsv")
-    manual_df = pd.read_csv(manual_df_path, parse_dates=["start", "end"], sep="\t")
+    manual_df = pd.read_csv(manual_df_path, parse_dates=["start", "end"], sep="\t")  # type:ignore
     yield {
         "result": result,
         "test_df": test_df,
@@ -45,13 +46,15 @@ def test_data_base():
     copyfile(offline_df_path_src, offline_df_path_dest)
     copyfile(online_df_path_src, online_df_path_dest)
     offline_df = pd.read_csv(
-        offline_df_path_src, sep="\t", parse_dates=["start", "end"]
+        offline_df_path_src, sep="\t", parse_dates=["start", "end"]  # type:ignore
+    )  # type:ignore
+    online_df = pd.read_csv(
+        online_df_path_src, sep="\t", parse_dates=["start", "end"]  # type:ignore
     )
-    online_df = pd.read_csv(online_df_path_src, sep="\t", parse_dates=["start", "end"])
     result = pd.read_csv(
         os.path.join(test_data_path, "baseclass_result.tsv"),
         sep="\t",
-        parse_dates=["start", "end"],
+        parse_dates=["start", "end"],  # type:ignore
     )
     yield {
         "result": result,

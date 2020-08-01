@@ -8,35 +8,31 @@ import datetime
 
 # import numpy as np
 import pandas as pd
-from pandas.util.testing import assert_frame_equal
 import pytest
-
-from work_tracker.functions.helpfer_functions import str_datetime, get_midnight_datetime
-from work_tracker.functions.update_work_db import DbInteraction
+from pandas.util.testing import assert_frame_equal
 from tests.custom_mocks import (
-    mock_True,
-    mock_pysftp_CnOpts,
     mock_datetime_now,
-    mock_time_short_break,
-    mock_time_long_break,
-    mock_numpy_now_date_change,
     mock_datetime_now_date_change,
+    mock_numpy_now_date_change,
+    mock_pysftp_CnOpts,
+    mock_time_long_break,
+    mock_time_short_break,
+    mock_True,
     mock_var_time,
 )
+
+from work_tracker.functions.helpfer_functions import get_midnight_datetime, str_datetime
+from work_tracker.functions.update_work_db import DbInteraction
 
 
 @pytest.fixture(scope="function")  # noqa: F811
 def DbInteraction_worker(test_data_base, monkeypatch):  # noqa: F811
-    monkeypatch.setattr(
-        "work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True
-    )
+    monkeypatch.setattr("work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True)
     monkeypatch.setattr(
         "work_tracker.functions.base_classes.DbBaseClass.push_remote_db", mock_True
     )
     monkeypatch.setattr("pysftp.CnOpts", mock_pysftp_CnOpts)
-    DbInteraction_worker = DbInteraction(
-        "../tests/test_data/test_user_config_update_work_db.ini"
-    )
+    DbInteraction_worker = DbInteraction("../tests/test_data/test_user_config_update_work_db.ini")
     # mocking the today value
     DbInteraction_worker.today = datetime.datetime(2017, 8, 8, 0, 0, 0, 0)
     DbInteraction_worker.tomorrow = datetime.datetime(2017, 8, 9, 0, 0, 0, 0)
@@ -49,8 +45,7 @@ def test_get_session_time(DbInteraction_worker):
 
 def test_update_now_and_tomorrow(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     DbInteraction_worker.update_now_and_tomorrow()
     assert DbInteraction_worker.today == get_midnight_datetime(
@@ -67,8 +62,7 @@ def test_update_db_locale_short_break(DbInteraction_worker, monkeypatch):
         mock_time_short_break,
     )
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ("17:14", "1:15")
@@ -77,21 +71,17 @@ def test_update_db_locale_short_break(DbInteraction_worker, monkeypatch):
 
 def test_update_db_locale_long_break(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now",
-        mock_time_long_break,
+        "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now", mock_time_long_break,
     )
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     session_time = DbInteraction_worker.update_db_locale()
     assert session_time == ("17:14", "1:10")
     assert len(DbInteraction_worker.db.index) == 4
 
 
-def test_update_db_with_day_change_and_running_update(
-    DbInteraction_worker, monkeypatch
-):
+def test_update_db_with_day_change_and_running_update(DbInteraction_worker, monkeypatch):
     # this is due to a bug i observed, where after midnight new rows did get appended
     # with start midnight and end current time
     db_before = DbInteraction_worker.db.copy()
@@ -121,14 +111,12 @@ def test_update_db_with_day_change_and_running_update(
         ]
     )
     result = db_before.append(new_row, ignore_index=True, sort=False)
-    assert session_time == ("0:00", "0:17")
+    assert session_time == ("0:00", "0:17")  # type:ignore
     assert len(DbInteraction_worker.db.index) == 5
     assert_frame_equal(DbInteraction_worker.db, result)
 
 
-def test_update_db_date_changed_during_session_short_break(
-    DbInteraction_worker, monkeypatch
-):
+def test_update_db_date_changed_during_session_short_break(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr(
         "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now",
         mock_numpy_now_date_change,
@@ -152,9 +140,7 @@ def test_update_db_date_changed_during_session_short_break(
     assert len(DbInteraction_worker.db.index) == 5
 
 
-def test_update_db_date_changed_during_session_long_break(
-    DbInteraction_worker, monkeypatch
-):
+def test_update_db_date_changed_during_session_long_break(DbInteraction_worker, monkeypatch):
     monkeypatch.setattr(
         "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now",
         mock_numpy_now_date_change,
@@ -189,8 +175,7 @@ def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data_
         mock_time_short_break,
     )
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     DbInteraction_worker.start_session()
     result = test_data_base["result"].copy()
@@ -200,12 +185,10 @@ def test_start_session_short_break(DbInteraction_worker, monkeypatch, test_data_
 
 def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data_base):
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now",
-        mock_time_long_break,
+        "work_tracker.functions.update_work_db.DbInteraction.get_pandas_now", mock_time_long_break,
     )
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     new_row = pd.DataFrame(
         [
@@ -216,9 +199,7 @@ def test_start_session_long_break(DbInteraction_worker, monkeypatch, test_data_b
             }
         ]
     )
-    result = (
-        test_data_base["result"].copy().append(new_row, ignore_index=True, sort=False)
-    )
+    result = test_data_base["result"].copy().append(new_row, ignore_index=True, sort=False)
     result.sort_values("start").reset_index(drop=True, inplace=True)
     DbInteraction_worker.occupation = "TestOccupation"
     DbInteraction_worker.start_session()
@@ -231,8 +212,7 @@ def test_change_occupation(DbInteraction_worker, monkeypatch):
         mock_time_short_break,
     )
     monkeypatch.setattr(
-        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now",
-        mock_datetime_now,
+        "work_tracker.functions.update_work_db.DbInteraction.get_datetime_now", mock_datetime_now,
     )
     DbInteraction_worker.update_db_locale()
     new_db = DbInteraction_worker.db.copy()

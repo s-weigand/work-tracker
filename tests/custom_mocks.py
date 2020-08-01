@@ -4,8 +4,9 @@
 @author: Sebastian Weigand
 """
 
-import pandas as pd
 from datetime import datetime, timedelta
+
+import pandas as pd
 
 from work_tracker.functions.helpfer_functions import str_datetime
 
@@ -25,15 +26,13 @@ def mock_datetime_now(*args):
 def mock_var_time(offset=0, kind="numpy"):
     def inner(*args):
         if kind == "numpy":
-            return pd.to_datetime("2017-08-08 23:59:00") + pd.Timedelta(
+            return pd.to_datetime("2017-08-08 23:59:00") + pd.Timedelta(  # type:ignore
                 offset, unit="m"
             )
         elif kind == "datetime":
             return str_datetime("2017-08-08 23:59:00.0") + timedelta(minutes=offset)
         else:
-            raise Exception(
-                f"unsupported kind '{kind}', kind need to be 'numpy' or 'datetime'"
-            )
+            raise Exception(f"unsupported kind '{kind}', kind need to be 'numpy' or 'datetime'")
 
     return inner
 
