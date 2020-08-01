@@ -19,6 +19,7 @@ repos:
     rev: 5.0.9
     hooks:
       - id: isort
+        args: [-m, "3", -tc]
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 5.0.2
     hooks:

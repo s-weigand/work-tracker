@@ -19,6 +19,8 @@ exclude = '''
 [tool.isort]
 profile = "hug"
 src_paths = ["work_tracker", "test"]
+include_trailing_comma = true
+line_length = 99
 
 [tool.interrogate]
 exclude = ["setup.py", "docs", "tests"]
