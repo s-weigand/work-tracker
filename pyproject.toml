@@ -19,3 +19,7 @@ exclude = '''
 [tool.isort]
 profile = "hug"
 src_paths = ["work_tracker", "test"]
+
+[tool.interrogate]
+exclude = ["setup.py", "docs", "tests"]
+ignore-init-module = true

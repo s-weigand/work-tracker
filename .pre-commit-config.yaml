@@ -23,10 +23,10 @@ repos:
     rev: 5.0.2
     hooks:
       - id: pydocstyle
-        exclude: "docs"
+        exclude: "docs|tests"
   - repo: https://github.com/econchick/interrogate
     rev: 1.2.0
     hooks:
       - id: interrogate
-        args: [-v, --fail-under=100]
-        exclude: "docs"
+        args: [-v]
+        exclude: "docs|tests"
