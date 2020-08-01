@@ -1,10 +1,12 @@
 pip>=18.1
 bump2version>=0.5.11
 wheel>=0.32.1
-# code formating
+# quality asurence
+pre-commit>=2.6.0
 black>=19.10b0
+flake8>=3.8.0
+isort>=5.2.2
 # test requirements
-flake8>=3.5.0
 tox>=3.5.2
 pytest>=4.0.0
 pytest-cov>=2.5.1
@@ -14,7 +16,7 @@ coverage>=4.5.1
 sphinx-rtd-theme>=0.3.1
 Sphinx>=1.8.1
 # runtime requirements
-# fixed so the bot can create PRs to test with new versions
+# pinned so the bot can create PRs to test with new versions
 Click==7.1.2
 pandas==1.1.2
 PyQt5==5.15.1
