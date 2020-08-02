@@ -1,13 +1,10 @@
 """Module containing the main GUI class."""
 
-# import os
-# import sys
 import configparser
 from typing import Tuple, Union
 
 from PyQt5 import QtCore, QtWidgets
 
-# import traceback
 from ..functions.update_work_db import DbInteraction, get_abs_path
 from .auto_generated.UI_work_tracker import Ui_work_tracker
 

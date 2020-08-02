@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Module containing the Worktime calculator class."""
-# import sys
+
 import datetime
 import os
 from typing import Dict, Union
@@ -12,9 +12,6 @@ from pandas.tseries.offsets import CustomBusinessDay  # type: ignore
 
 from .base_classes import DbBaseClass
 from .update_work_db import get_abs_path
-
-# import configparser
-
 
 # from .helpfer_functions import debug_printer
 

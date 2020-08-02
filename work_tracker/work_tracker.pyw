@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-"""
+"""Main application"""
 from PyQt5 import QtWidgets
 from .UI_files.worktracker_main import WorkTracker
 

@@ -5,16 +5,10 @@ import datetime
 from configparser import ConfigParser
 from typing import Tuple
 
-# import numpy as np
 import pandas as pd
 
 from .base_classes import DbBaseClass
 from .helpfer_functions import get_abs_path, get_midnight_datetime, seconds_to_hm
-
-# import os
-
-
-# import pysftp
 
 
 class DbInteraction(DbBaseClass):
