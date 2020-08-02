@@ -28,13 +28,21 @@ repos:
     rev: 1.2.0
     hooks:
       - id: interrogate
-        args: [-v, -g, docs/_static]
+        args: [-v]
         exclude: "docs|tests"
   - repo: local
     hooks:
       - id: tests
         name: run tests
         entry: pytest -v tests
+        language: system
+        types: [python]
+        stages: [push]
+
+      - id: interrogate-badge
+        name: Update interrogate badge
+        entry: interrogate -g docs/_static work_tracker
+        args: [-v, -g, docs/_static]
         language: system
         types: [python]
         stages: [push]
