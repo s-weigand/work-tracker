@@ -38,11 +38,10 @@ repos:
         language: system
         types: [python]
         stages: [push]
-
-      - id: interrogate-badge
-        name: Update interrogate badge
-        entry: interrogate -g docs/_static work_tracker
-        args: [-v, -g, docs/_static]
-        language: system
-        types: [python]
-        stages: [push]
+      # - id: interrogate-badge
+      #   name: Update interrogate badge
+      #   entry: interrogate -g docs/_static work_tracker
+      #   args: [-v, -g, docs/_static]
+      #   language: system
+      #   types: [python]
+      #   stages: [push]
