@@ -30,3 +30,11 @@ repos:
       - id: interrogate
         args: [-v, -g, docs/_static]
         exclude: "docs|tests"
+  - repo: local
+    hooks:
+      - id: tests
+        name: run tests
+        entry: pytest -v tests
+        language: system
+        types: [python]
+        stages: [push]
