@@ -179,7 +179,8 @@ class WorktimeCalculator(DbBaseClass):
 
         Returns
         -------
-        holidays : Union[HolidayBase, Dict]
+        Union[HolidayBase, Dict]
+            HolidayBase object for the given country and province or an empty dict.
 
         """
         # fallback in case country wasn't provided
@@ -216,7 +217,7 @@ class WorktimeCalculator(DbBaseClass):
 
         Returns
         -------
-        manual_df: pandas.DataFrame
+        pandas.DataFrame
             Dataframe containing the to a daily base expanded entry's of manual_df.
 
         """
@@ -243,7 +244,8 @@ class WorktimeCalculator(DbBaseClass):
 
         The first lasting until midnight and the second starting at midnight.
 
-        i.e.:
+        .. code-block:: text
+
             df before:
             start   end
             1.1.1970 21:00:00   2.1.1970 02:00:00
@@ -275,7 +277,11 @@ class WorktimeCalculator(DbBaseClass):
         Returns
         -------
         pd.DataFrame
-            [description]
+            Dataframe with 'worktime' and time columns
+
+        See Also
+        --------
+        add_time_columns
 
         """
         self.db["worktime"] = self.db["end"] - self.db["start"]
@@ -299,8 +305,10 @@ class WorktimeCalculator(DbBaseClass):
         Parameters
         ----------
         df: pd.DataFrame
+            Dataframe the columns should be added to.
 
         date_time_column: str
+            Name of the column containing the used date
 
         Returns
         -------
@@ -326,7 +334,7 @@ class WorktimeCalculator(DbBaseClass):
         Parameters
         ----------
         rule : str
-            resampling rule see pandas.DataFrame.resample
+            Resampling rule see pandas.DataFrame.resample
 
         Returns
         -------
