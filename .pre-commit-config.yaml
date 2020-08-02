@@ -29,5 +29,5 @@ repos:
     rev: 1.2.0
     hooks:
       - id: interrogate
-        args: [-v]
+        args: [-v, -g, docs/_static]
         exclude: "docs|tests"

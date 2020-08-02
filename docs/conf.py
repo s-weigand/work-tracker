@@ -23,7 +23,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import work_tracker
+import work_tracker  # noqa: E402
 
 # -- General configuration ---------------------------------------------
 
@@ -63,9 +63,9 @@ linkcheck_ignore = [
 master_doc = "index"
 
 # General information about the project.
-project = u"work-tracker"
-copyright = u"2018, Sebastian Weigand"
-author = u"Sebastian Weigand"
+project = "work-tracker"
+copyright = "2018, Sebastian Weigand"
+author = "Sebastian Weigand"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -114,7 +114,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []  # ['_static']
+html_static_path = ["_static"]
 
 
 # -- Options for HTMLHelp output ---------------------------------------
@@ -144,13 +144,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (
-        master_doc,
-        "work_tracker.tex",
-        u"work-tracker Documentation",
-        u"Sebastian Weigand",
-        "manual",
-    ),
+    (master_doc, "work_tracker.tex", "work-tracker Documentation", "Sebastian Weigand", "manual",),
 ]
 
 
@@ -158,7 +152,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "work_tracker", u"work-tracker Documentation", [author], 1)]
+man_pages = [(master_doc, "work_tracker", "work-tracker Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------
@@ -170,11 +164,10 @@ texinfo_documents = [
     (
         master_doc,
         "work_tracker",
-        u"work-tracker Documentation",
+        "work-tracker Documentation",
         author,
         "work_tracker",
         "One line description of project.",
         "Miscellaneous",
     ),
 ]
-
