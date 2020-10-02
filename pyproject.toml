@@ -1,0 +1,27 @@
+[tool.black]
+line-length = 99
+target-version = ['py36', 'py37', 'py38']
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "hug"
+src_paths = ["work_tracker", "test"]
+include_trailing_comma = true
+line_length = 99
+
+[tool.interrogate]
+exclude = ["setup.py", "docs", "tests", "work_tracker/UI_files/auto_generated", "work_tracker\\UI_files\\auto_generated"]
+ignore-init-module = true

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sat May 14 15:32:16 2016
 
@@ -6,33 +5,29 @@ Created on Sat May 14 15:32:16 2016
 """
 
 import datetime
+
 import pandas as pd
-from pandas.util.testing import assert_frame_equal
 import pytest
+from pandas.util.testing import assert_frame_equal
 
-from work_tracker.functions.helpfer_functions import (
-    get_abs_path,
-)  # debug_printer , seconds_to_hm
 from work_tracker.functions.calc_worktime import WorktimeCalculator
-from .test_update_work_db import str_datetime
-from .custom_mocks import mock_True, mock_pysftp_CnOpts
+from work_tracker.functions.helpfer_functions import get_abs_path  # debug_printer , seconds_to_hm
 
-pd.options.display.width = 300
-pd.options.display.max_colwidth = 50
+from .custom_mocks import mock_pysftp_CnOpts, mock_True
+from .test_update_work_db import str_datetime
+
+pd.options.display.width = 300  # type:ignore
+pd.options.display.max_colwidth = 50  # type:ignore
 
 
 @pytest.fixture(scope="function")
 def Calculator(monkeypatch, data_test_calc):
-    monkeypatch.setattr(
-        "work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True
-    )
+    monkeypatch.setattr("work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True)
     monkeypatch.setattr(
         "work_tracker.functions.base_classes.DbBaseClass.push_remote_db", mock_True
     )
     monkeypatch.setattr("pysftp.CnOpts", mock_pysftp_CnOpts)
-    Calculator = WorktimeCalculator(
-        "../tests/test_data/test_user_config_calc_worktime.ini"
-    )
+    Calculator = WorktimeCalculator("../tests/test_data/test_user_config_calc_worktime.ini")
     # needed for all tests involving holidays
     Calculator.holidays.update({datetime.datetime(2017, 8, 4): "test_holiday"})
     return Calculator
@@ -55,9 +50,7 @@ def test_get_holiday_df(Calculator):
             }
         ]
     )
-    assert_frame_equal(
-        holidays_df, holiday_result[["start", "end", "occupation", "worktime"]]
-    )
+    assert_frame_equal(holidays_df, holiday_result[["start", "end", "occupation", "worktime"]])
 
 
 def test_get_manual_df_with_workime(Calculator, data_test_calc):
@@ -110,12 +103,10 @@ def test_generate_contract_worktime_df(Calculator):
 def test_get_total_df(Calculator):
     total_df = Calculator.get_total_df()
 
-    result_path = get_abs_path(
-        "../tests/test_data/calc_worktime/result_total_df.tsv"
-    )
+    result_path = get_abs_path("../tests/test_data/calc_worktime/result_total_df.tsv")
     result_df = pd.read_csv(
         result_path,
-        parse_dates=["start", "end"],
+        parse_dates=["start", "end"],  # type:ignore
         sep="\t",
         converters={"worktime": pd.to_timedelta},
     )
@@ -129,7 +120,7 @@ def test_get_plot_df(Calculator):
     result = pd.read_csv(
         result_path,
         sep="\t",
-        parse_dates=["start"],
+        parse_dates=["start"],  # type:ignore
         converters={
             "Inno": pd.to_timedelta,
             "RemEx": pd.to_timedelta,

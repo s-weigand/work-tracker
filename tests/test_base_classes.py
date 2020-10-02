@@ -1,22 +1,20 @@
-# -*- coding: utf-8 -*-
 """
 @file: test_update_work_db.py
 @author: Sebastian Weigand
 """
 
-import datetime
-import pytest
 import pandas as pd
+import pytest
 from pandas.util.testing import assert_frame_equal
-
-from work_tracker.functions.helpfer_functions import str_datetime
-from work_tracker.functions.base_classes import DbBaseClass
 from tests.custom_mocks import (
+    mock_pysftp_CnOpts,
     mock_time_short_break,
     mock_True,
-    mock_pysftp_CnOpts,
     mockDatetimeNow,
 )
+
+from work_tracker.functions.base_classes import DbBaseClass
+from work_tracker.functions.helpfer_functions import str_datetime
 
 # from work_tracker.functions.helpfer_functions import debug_printer
 
@@ -29,9 +27,7 @@ def DbBaseClass_worker(test_data_base, monkeypatch):
 
 def test_get_pandas_now(DbBaseClass_worker, monkeypatch):
     monkeypatch.setattr("datetime.datetime", mockDatetimeNow)
-    assert DbBaseClass_worker.get_pandas_now() == pd.to_datetime(
-        "2017-08-08 18:29:33.000000"
-    )
+    assert DbBaseClass_worker.get_pandas_now() == pd.to_datetime("2017-08-08 18:29:33.000000")
 
 
 def test_CnOpts_exception(DbBaseClass_worker, monkeypatch, capsys):
@@ -45,9 +41,7 @@ def test_get_remote_db(DbBaseClass_worker, sftpserver, capsys):
     assert not DbBaseClass_worker.get_remote_db()
     # just prevents printing of Failed to get remote_db
     capsys.readouterr()
-    with sftpserver.serve_content(
-        {"test_folder": {"test_file.csv": "test file content"}}
-    ):
+    with sftpserver.serve_content({"test_folder": {"test_file.csv": "test file content"}}):
         DbBaseClass_worker.load_config()
         new_login = {
             "host": sftpserver.host,
@@ -68,9 +62,7 @@ def mocked_DbBaseClass_worker(test_data_base, monkeypatch):
         "work_tracker.functions.base_classes.DbBaseClass.get_pandas_now",
         mock_time_short_break,
     )
-    monkeypatch.setattr(
-        "work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True
-    )
+    monkeypatch.setattr("work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True)
     monkeypatch.setattr(
         "work_tracker.functions.base_classes.DbBaseClass.push_remote_db", mock_True
     )
@@ -78,9 +70,6 @@ def mocked_DbBaseClass_worker(test_data_base, monkeypatch):
     db_worker = DbBaseClass("../tests/test_data/test_user_config_update_work_db.ini")
     db_worker.load_config()
     db_worker.db = db_worker.load_db(db_worker.db_path_offline)
-    # mocking the today value
-    db_worker.today = datetime.datetime(2017, 8, 8, 0, 0, 0, 0)
-    db_worker.tomorrow = datetime.datetime(2017, 8, 9, 0, 0, 0, 0)
     return db_worker
 
 

@@ -1,6 +1,6 @@
-* work-tracker version:
-* Python version:
-* Operating System:
+- work-tracker version:
+- Python version:
+- Operating System:
 
 ### Description
 

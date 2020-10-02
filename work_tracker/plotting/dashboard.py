@@ -1,18 +1,33 @@
+"""Plotting module."""
+
+import os
 import sys
-import dash
-from dash.dependencies import Input, Output
-import dash_core_components as dcc
-import dash_html_components as html
-import plotly.graph_objs as go
 import traceback
 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 import flask
 import pandas as pd
-import os
+from dash.dependencies import Input, Output
+from plotly import graph_objs as go
 
 
-def timedelt_to_float_h(timedeltas):
-    seconds = timedeltas.total_seconds()
+def timedelt_to_float_h(timedeltas: pd.Timedelta) -> float:  # type:ignore
+    """
+    Convert timedelta to float.
+
+    Parameters
+    ----------
+    timedeltas : pd.Timedelta
+        Timedifference.
+
+    Returns
+    -------
+    float
+        Timedelta as seconds.
+    """
+    seconds = timedeltas.total_seconds()  # type:ignore
     return seconds / 3600
 
 
@@ -23,12 +38,12 @@ server.secret_key = os.environ.get("secret_key", "secret")
 stechkarte = pd.read_csv(
     os.path.join(os.path.dirname(__file__), "../../mydata/.stechkarte_local.csv"),
     sep="\t",
-    parse_dates=["start", "end"],
+    parse_dates=["start", "end"],  # type:ignore
 )
 stechkarte["worktime"] = stechkarte["end"] - stechkarte["start"]
 
 min_date = stechkarte["start"].min()
-max_date = stechkarte["start"].max() + pd.Timedelta(days=31)
+max_date = stechkarte["start"].max() + pd.Timedelta(days=31)  # type:ignore
 
 occupations = stechkarte["occupation"].unique()
 option_list = []
@@ -43,9 +58,7 @@ dcc._js_dist[0]["external_url"] = "https://cdn.plot.ly/plotly-basic-latest.min.j
 app.layout = html.Div(
     [
         html.H1("Worktracker plot"),
-        dcc.Dropdown(
-            id="my-dropdown", options=option_list, value=occupations, multi=True
-        ),
+        dcc.Dropdown(id="my-dropdown", options=option_list, value=occupations, multi=True),
         dcc.DatePickerSingle(id="min-date", date=min_date, display_format="YYYY-MM-DD"),
         dcc.DatePickerSingle(id="max-date", date=max_date, display_format="YYYY-MM-DD"),
         dcc.Graph(id="my-graph"),
@@ -63,6 +76,23 @@ app.layout = html.Div(
     ],
 )
 def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
+    """
+    Update graph.
+
+    Parameters
+    ----------
+    selected_dropdown_value : [type]
+        [description]
+    sel_min_date : [type]
+        [description]
+    sel_max_date : [type]
+        [description]
+
+    Returns
+    -------
+    [type]
+        [description]
+    """
     # dff = df[df['Stock'] == selected_dropdown_value]
     # plotdata = stechkarte[stechkarte["occupation"] == selected_dropdown_value]
     # worktime = plotdata.resample('M', on='start').sum()["worktime"]\
@@ -95,10 +125,7 @@ def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
     sel_max_date = pd.to_datetime(sel_max_date)
     try:
         ranged_stechkarte = stechkarte[
-            (
-                (stechkarte["start"] >= sel_min_date)
-                & (stechkarte["start"] <= sel_max_date)
-            )
+            ((stechkarte["start"] >= sel_min_date) & (stechkarte["start"] <= sel_max_date))
         ]
         for occupation in selected_dropdown_value:
             plotdata = ranged_stechkarte[ranged_stechkarte["occupation"] == occupation]

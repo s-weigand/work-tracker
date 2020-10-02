@@ -1,3 +1,5 @@
+"""Package containing the UI files."""
+
 import os
 import sys
 

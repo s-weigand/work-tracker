@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -37,7 +36,11 @@ setup(
     ],
     python_requires=">=3.6",
     description="Simple tool to keep track of your work time and/or productivity ",
-    entry_points={"console_scripts": ["work_tracker=work_tracker.cli:main",],},
+    entry_points={
+        "console_scripts": [
+            "work_tracker=work_tracker.cli:main",
+        ],
+    },
     install_requires=requirements,
     license="Apache Software License 2.0",
     long_description=readme + "\n\n" + history,
