@@ -1,37 +1,20 @@
-# package in dev mode
--e .
-# deployment
 pip>=18.1
-wheel>=0.32.1
 bump2version>=0.5.11
-# runtime requirements
-# pinned so the bot can create PRs to test with new versions
-Click==7.1.2
-dash==1.14.0
-holidays==0.10.3
-pandas==1.1.0
-PyQt5==5.15.0
-pysftp==0.2.9
-# quality asurence
+wheel>=0.32.1
+# code formating
 black>=19.10b0
-flake8>=3.8.0
-isort>=5.2.2
-pre-commit>=2.6.0
-pydocstyle>=5.0.2
-# docs requirements
-Sphinx>=1.8.1
-sphinx-rtd-theme>=0.3.1
 # test requirements
-coverage>=4.5.1
+flake8>=3.5.0
+tox>=3.5.2
 pytest>=4.0.0
 pytest-cov>=2.5.1
 pytest-sftpserver>=1.2
-Sphinx>=1.8.1
+coverage>=4.5.1
 # docs requirements
 sphinx-rtd-theme>=0.3.1
 Sphinx>=1.8.1
 # runtime requirements
-# pinned so the bot can create PRs to test with new versions
+# fixed so the bot can create PRs to test with new versions
 Click==7.1.2
 pandas==1.1.2
 PyQt5==5.15.1
