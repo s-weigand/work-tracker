@@ -9,6 +9,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     work_tracker = WorkTracker()
     work_tracker.show()
-    #  pushing new db before exiting programm
+    #  pushing new db before exiting program
     app.aboutToQuit.connect(work_tracker.quit_handler)
     sys.exit(app.exec_())

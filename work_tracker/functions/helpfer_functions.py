@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module containing helper functions."""
 import datetime
 import hashlib

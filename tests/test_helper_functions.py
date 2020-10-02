@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
 """
 @file: test_helper_functions.py
 @author: Sebastian Weigand
 """
 
-import os
 import datetime
+import os
 
 from work_tracker.functions.helpfer_functions import (
+    debug_printer,
     get_abs_path,
+    get_midnight_datetime,
     seconds_to_hm,
     str_datetime,
-    get_midnight_datetime,
-    debug_printer,
 )
 
 
@@ -30,11 +29,9 @@ def test_get_midnight_datetime():
 
 def test_get_abs_path():
     abs_path = get_abs_path("")
-    base_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../work_tracker")
-    )
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../work_tracker"))
     assert os.path.isabs(abs_path)
-    # looks starnage but with the drive letter beeing capital or
+    # looks strange but with the drive letter being capital or
     # not this caused problems ...
     assert os.path.relpath(abs_path, base_path) == "."
 

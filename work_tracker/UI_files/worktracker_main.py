@@ -24,7 +24,7 @@ class updateThread(QtCore.QThread):
 
     def __init__(self, parent=None, *args):
         """Separate thread to not block the Ui while updating the database."""
-        super(updateThread, self).__init__(parent)
+        super().__init__(parent)
         self.db_worker = DbInteraction()
         self.db_worker.start_session()
         self.push_signal.connect(self.push_db)
@@ -61,9 +61,9 @@ class WorkTracker(QtWidgets.QWidget, Ui_work_tracker):
         user_config_path: str = ".user_config.ini",
         parent: Union[QtWidgets.QWidget, QtWidgets.QApplication, None] = None,
         *args,
-    ):  # noqa: D401
+    ):
         """
-        Main GUI widget.
+        Main-GUI widget.
 
         Parameters
         ----------
@@ -73,7 +73,7 @@ class WorkTracker(QtWidgets.QWidget, Ui_work_tracker):
         parent : [type], optional
             Parent widget, by default None
         """
-        super(WorkTracker, self).__init__(parent)
+        super().__init__(parent)
         self.setupUi(self)
         self.user_config_path = get_abs_path(user_config_path)
         self.update_thread = updateThread()

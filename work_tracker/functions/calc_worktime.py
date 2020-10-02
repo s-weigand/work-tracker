@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module containing the Worktime calculator class."""
 
 import datetime
@@ -149,7 +148,7 @@ class WorktimeCalculator(DbBaseClass):
         """
         Generate a Dataframe containing all needed holidays.
 
-        They beginn at the start of the  first contract until now,
+        They begin at the start of the  first contract until now,
         as well as work time based on the contract parameters for those days.
 
         Returns

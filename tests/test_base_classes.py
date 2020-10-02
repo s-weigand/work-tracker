@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @file: test_update_work_db.py
 @author: Sebastian Weigand
@@ -60,7 +59,8 @@ def test_get_remote_db(DbBaseClass_worker, sftpserver, capsys):
 @pytest.fixture()
 def mocked_DbBaseClass_worker(test_data_base, monkeypatch):
     monkeypatch.setattr(
-        "work_tracker.functions.base_classes.DbBaseClass.get_pandas_now", mock_time_short_break,
+        "work_tracker.functions.base_classes.DbBaseClass.get_pandas_now",
+        mock_time_short_break,
     )
     monkeypatch.setattr("work_tracker.functions.base_classes.DbBaseClass.get_remote_db", mock_True)
     monkeypatch.setattr(

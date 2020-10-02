@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Sat May 14 15:32:16 2016
 
@@ -92,7 +91,7 @@ def test_generate_contract_worktime_df(Calculator):
     result_df = pd.DataFrame(
         {
             "worktime": pd.to_timedelta([8] * 7 + [9], unit="h"),
-            "start": pd.Series(date_index),  # noqa: E231
+            "start": pd.Series(date_index),
         }
     )
     # drop rows not in test week mask

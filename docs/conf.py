@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 # work_tracker documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
@@ -144,7 +143,13 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "work_tracker.tex", "work-tracker Documentation", "Sebastian Weigand", "manual",),
+    (
+        master_doc,
+        "work_tracker.tex",
+        "work-tracker Documentation",
+        "Sebastian Weigand",
+        "manual",
+    ),
 ]
 
 

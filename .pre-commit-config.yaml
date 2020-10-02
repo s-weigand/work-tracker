@@ -1,3 +1,5 @@
+exclude: work_tracker/UI_files/auto_generated
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
@@ -41,6 +43,7 @@ repos:
     rev: 1.3.1
     hooks:
       - id: interrogate
+        args: [work_tracker]
         exclude: "docs|tests"
 
   - repo: https://github.com/myint/rstcheck
@@ -69,8 +72,10 @@ repos:
     rev: 1.3.1
     hooks:
       - id: interrogate
+        alias: interrogate-badge
         name: Update interrogate badge
         args: [-g, docs/_static]
+        exclude: "docs|tests"
         always_run: true
         types: [python]
         stages: [push]

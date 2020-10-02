@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @file: test_update_work_db.py
 @author: Sebastian Weigand

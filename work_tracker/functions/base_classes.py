@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module containing the baseclass for data interactions."""
 import datetime
 import os
@@ -37,9 +36,9 @@ class DbBaseClass:
         """
         return pd.to_datetime(datetime.datetime.now())
 
-    def get_datetime_now(self) -> datetime.datetime:  # noqa: D401
+    def get_datetime_now(self) -> datetime.datetime:
         """
-        Convenience method for mocking of datetime.datetime.now() in unittests.
+        Helpermethod for mocking of datetime.datetime.now() in unittests.
 
         Returns
         -------
@@ -156,7 +155,7 @@ class DbBaseClass:
         Returns
         -------
         bool
-            Wether database retrieval succeeded oder not.
+            Whether database retrieval succeeded or not.
         """
         try:
             with pysftp.Connection(**self.login_dict) as sftp:
@@ -175,7 +174,7 @@ class DbBaseClass:
         Returns
         -------
         bool
-            Wether database upload succeeded oder not.
+            Whether database upload succeeded or not.
         """
         try:
             with pysftp.Connection(**self.login_dict) as sftp:

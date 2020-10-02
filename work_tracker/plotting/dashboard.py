@@ -72,7 +72,7 @@ app.layout = html.Div(
     [
         Input("my-dropdown", "value"),
         Input("min-date", "date"),
-        Input("max-date", "date"),  # noqa: E231
+        Input("max-date", "date"),
     ],
 )
 def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
@@ -141,7 +141,7 @@ def update_graph(selected_dropdown_value, sel_min_date, sel_max_date):
                         "x": worktime.index,
                         "y": worktime.values,
                         "name": occupation,
-                        "type": "bar",  # noqa: E231
+                        "type": "bar",
                     }
                 )
         # Total

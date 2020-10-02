@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module containing Database interaction class."""
 
 import datetime
@@ -175,7 +174,10 @@ class DbInteraction(DbBaseClass):
             self.db = self.db.append(new_day_df, ignore_index=True, sort=False)
         self.db.sort_values(["start"]).reset_index(drop=True, inplace=True)
         self.db.to_csv(
-            self.db_path_offline, index=False, columns=["start", "end", "occupation"], sep="\t",
+            self.db_path_offline,
+            index=False,
+            columns=["start", "end", "occupation"],
+            sep="\t",
         )
         return self.get_start_time(), self.get_session_time()
 
