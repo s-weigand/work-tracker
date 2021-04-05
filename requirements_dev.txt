@@ -19,5 +19,5 @@ Click==7.1.2
 pandas==1.2.3;python_version >= '3.7'
 PyQt5==5.15.4
 pysftp==0.2.9
-holidays==0.10.5.2
+holidays==0.11.1
 dash==1.19.0
