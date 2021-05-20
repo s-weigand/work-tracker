@@ -15,7 +15,7 @@ sphinx-rtd-theme>=0.3.1
 Sphinx>=1.8.1
 # runtime requirements
 # pinned so the bot can create PRs to test with new versions
-Click==8.0.0
+Click==8.0.1
 pandas==1.2.4;python_version >= '3.7'
 PyQt5==5.15.4
 pysftp==0.2.9
