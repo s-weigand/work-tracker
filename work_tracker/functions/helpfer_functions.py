@@ -115,7 +115,7 @@ def debug_printer(arg):
     frame = inspect.currentframe()
     try:
         context = inspect.getframeinfo(frame.f_back).code_context  # type: ignore
-        caller_lines = "".join([line.strip() for line in context])
+        caller_lines = "".join(line.strip() for line in context)
         m = re.search(r"debug_printer\s*\((.+)\)$", caller_lines)
         if m:
             caller_lines = m.group(1)
