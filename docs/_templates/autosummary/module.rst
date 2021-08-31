@@ -1,66 +1,104 @@
 {% block module %}
-{{ fullname | replace("work_tracker.", "") | escape | underline}}
-{#{% set reduced_name={child_modules} %}#}
+{{ name  | escape | underline }}
 
 .. currentmodule:: {{ module }}
 
 .. automodule:: {{ fullname }}
 
-    {% if fullname in known_packages %}
-    .. rubric:: Submodules
 
-    .. autosummary::
-        {% for item in child_modules %}
-            {% if item.startswith( fullname + ".") %}
-                {{ item }}
-            {% endif %}
-        {%- endfor %}
-    {% endif %}
+{% block modules %}
+  {% if modules %}
 
+  .. rubric:: Modules
 
-    {% block functions %}
-    {% if functions %}
+  .. autosummary::
+    :toctree: {{ name }}
+    :recursive:
 
-    .. rubric:: Summary
-
-    .. autosummary::
-        :toctree: {{ fullname | replace("work_tracker.", "") | replace(".", "/") }}/functions
-        :nosignatures:
-        {% for item in functions %}
-        {{ item }}
-        {%- endfor %}
-    {% endif %}
-    {% endblock %}
-
-
-    {% block classes %}
-    {% if classes %}
-
-    .. rubric:: Summary
-
-    .. autosummary::
-        :toctree: {{ fullname | replace("work_tracker.", "") | replace(".", "/") }}/classes
-        :nosignatures:
-    {% for item in classes %}
-        {{ item }}
+    {% for item in modules %}
+      {{ item }}
     {%- endfor %}
-    {% endif %}
-    {% endblock %}
 
-    {% block exceptions %}
-    {% if exceptions %}
+  {% endif %}
+
+{% endblock %}
 
 
-    .. rubric:: Exception Summary
+{% block attributes %}
+  {% if attributes %}
+  .. rubric:: Module Attributes
 
-    .. autosummary::
-        :toctree: {{ fullname | replace("work_tracker.", "") | replace(".", "/") }}/exceptions
-        :nosignatures:
-    {% for item in exceptions %}
+  .. autosummary::
+      :toctree: {{ name }}
+
+      {% for item in attributes %}
+          {{ item }}
+      {%- endfor %}
+
+  {% endif %}
+
+{% endblock %}
+
+{% block functions %}
+  {% if functions %}
+
+Functions
+---------
+
+  .. rubric:: Summary
+
+  .. autosummary::
+      :toctree: {{ name }}/functions
+      :nosignatures:
+
+      {% for item in functions %}
         {{ item }}
-    {%- endfor %}
-    {% endif %}
-    {% endblock %}
+      {%- endfor %}
+
+  {% endif %}
+
+{% endblock %}
+
+{% block classes %}
+  {% if classes %}
+
+Classes
+-------
+
+  .. rubric:: Summary
+
+  .. autosummary::
+      :toctree: {{ name }}/classes
+      :nosignatures:
+
+      {% for item in classes %}
+        {{ item }}
+      {%- endfor %}
+
+  {% endif %}
+
+{% endblock %}
+
+
+{% block exceptions %}
+  {% if exceptions %}
+
+Exceptions
+----------
+
+  .. rubric:: Exception Summary
+
+  .. autosummary::
+      :toctree: {{ name }}/exceptions
+      :nosignatures:
+
+      {% for item in exceptions %}
+          {{ item }}
+      {%- endfor %}
+
+  {% endif %}
+
+{% endblock %}
 
 
 {% endblock %}
