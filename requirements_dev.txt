@@ -11,8 +11,7 @@ pytest-cov>=2.5.1
 pytest-sftpserver>=1.2
 coverage>=4.5.1
 # docs requirements
-sphinx-rtd-theme>=0.3.1
-Sphinx>=1.8.1
+-r docs/requirements.txt
 # runtime requirements
 # pinned so the bot can create PRs to test with new versions
 Click==8.0.1
