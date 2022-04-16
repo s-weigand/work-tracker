@@ -68,14 +68,3 @@ repos:
     hooks:
       - id: yesqa
         additional_dependencies: [flake8-docstrings]
-  - repo: https://github.com/econchick/interrogate
-    rev: 1.5.0
-    hooks:
-      - id: interrogate
-        alias: interrogate-badge
-        name: Update interrogate badge
-        args: [-g, docs/_static]
-        exclude: "docs|tests"
-        always_run: true
-        types: [python]
-        stages: [push]
