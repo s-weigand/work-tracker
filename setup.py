@@ -15,7 +15,7 @@ requirements = [
     "pandas>=0.23.4",
     "PyQt5>=5.6.0",
     "pysftp>=0.2.9",
-    "holidays>=0.9.8",
+    "holidays>=0.13",
     "dash>=0.37.0",
 ]
 

@@ -184,8 +184,8 @@ class WorktimeCalculator(DbBaseClass):
             # get holidays class depending on the country
             country_class = getattr(holidays, self.country)
             # init holiday class depending province
-            if self.province in country_class.PROVINCES:  # type: ignore
-                custom_holidays: HolidayBase = country_class(state=self.province)  # type: ignore
+            if self.province in country_class.subdivisions:  # type: ignore
+                custom_holidays: HolidayBase = country_class(subdiv=self.province)  # type: ignore
             else:
                 custom_holidays: HolidayBase = country_class()  # type: ignore
             # update holidays with special_holidays, given in the config
