@@ -13,7 +13,7 @@ repos:
         args: [--remove]
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.32.0
+    rev: v2.32.1
     hooks:
       - id: pyupgrade
         args: [--py36-plus]
@@ -47,7 +47,7 @@ repos:
         exclude: "docs|tests"
 
   - repo: https://github.com/myint/rstcheck
-    rev: v5.0.0
+    rev: v6.0.0rc1
     hooks:
       - id: rstcheck
         additional_dependencies: [sphinx, rstcheck]
