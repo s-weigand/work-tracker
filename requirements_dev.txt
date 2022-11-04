@@ -19,4 +19,4 @@ pandas==1.5.0;python_version >= '3.8'
 PyQt5==5.15.7
 pysftp==0.2.9
 holidays==0.16
-dash==2.6.2
+dash==2.7.0
