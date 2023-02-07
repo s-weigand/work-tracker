@@ -16,7 +16,7 @@ coverage>=4.5.1
 # pinned so the bot can create PRs to test with new versions
 Click==8.1.3
 pandas==1.5.0;python_version >= '3.8'
-PyQt5==5.15.7
+PyQt5==5.15.9
 pysftp==0.2.9
 holidays==0.16
 dash==2.6.2
